@@ -1,0 +1,16 @@
+
+{
+    "users": [
+      {
+        "id": 1,
+        "username": "user1",
+        "password": "password123",
+        "name": "홍길동",
+        "email": "user1@example.com",
+        "phone": "010-1234-5678",
+        "birth": "2024.06.10",
+        "gender": "male"
+      }
+    ]
+  }
+  
