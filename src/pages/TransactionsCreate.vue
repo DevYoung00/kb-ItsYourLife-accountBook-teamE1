@@ -1,12 +1,18 @@
-<template>
-  <TranscationsForm/>
-</template>
-
 <script setup>
-  import TranscationsForm from '../components/TranscationsForm.vue';
+  import TransactionsForm from '../components/TranscationsForm.vue'
 </script>
 
+<template>
+  <header>
+  </header>
 
-<style>
+  <body>
+    <div>
+      <TransactionsForm />
+    </div>
+  </body>
 
+</template>
+
+<style scoped>
 </style>

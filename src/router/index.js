@@ -6,9 +6,9 @@ const routes = [
 
   //가계부 등록 라우터
   {
-    path: '/trans_create',
+    path: '/transactions/create',
     name: 'TransactionsCreate',
-    component : TransactionsCreate
+    component: TransactionsCreate
   }
 ];
 
