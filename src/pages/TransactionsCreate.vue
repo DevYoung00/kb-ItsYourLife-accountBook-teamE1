@@ -1,11 +1,12 @@
 <template>
-
+  <TranscationsForm/>
 </template>
 
-<script>
-
+<script setup>
+  import TranscationsForm from '../components/TranscationsForm.vue';
 </script>
 
 
-<style scoped>
+<style>
+
 </style>
