@@ -154,4 +154,3 @@ export default {
 img {
     cursor: pointer;
 }
-</style>

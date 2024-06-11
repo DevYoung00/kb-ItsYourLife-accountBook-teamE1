@@ -5,10 +5,11 @@ export const useTransactionsStore = defineStore({
   state: () => ({
    transactions:[],
   }),
+  // mutations, actions, getters
   mutations: () => ({
     initTransactions(transactions){
-        this.transactions = transactions;
+      this.transactions = transactions;
     }
   })
-  // mutations, actions, getters
+  
 });
