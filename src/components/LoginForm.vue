@@ -47,7 +47,8 @@ export default {
           const userStore = useUsersStore();
           userStore.setUserId(this.username);
           alert('로그인에 성공하였습니다.');
-          this.$router.push('/');
+          //나중에 홈화면으로 이동하도록 수정 필요, 현재는 가계부 거래 등록 화면으로 넘어가도록 설정
+          this.$router.push('/transactions/create');
         } else {
           alert('아이디/패스워드를 다시 한번 확인 부탁드립니다.');
         }

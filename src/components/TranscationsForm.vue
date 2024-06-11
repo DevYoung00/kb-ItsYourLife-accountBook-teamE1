@@ -57,11 +57,14 @@
           //마지막 데이터의 id 값 얻어와서 1 추가
           const response = await axios.get('http://localhost:3001/transactions');
           const lastPostId = response.data[response.data.length - 1].id;
-          console.log(lastPostId);
+          // console.log(lastPostId);
           const newPostId = Number(lastPostId) + 1;
   
+          const userid = userStore.getUserId;
+          console.log(userid);
+
           //게시물 id 값과 현재 로그인된 사용자 아이디 값 추가하여 json-server에 전송
-          const newPostData = { id: newPostId.toString(), ...transaction, userId: userStore.userId };
+          const newPostData = { id: newPostId.toString(), ...transaction, userId: userStore.getUserId };
   
           await axios.post('http://localhost:3001/transactions', newPostData);
           console.log("Transaction saved:", response.data);

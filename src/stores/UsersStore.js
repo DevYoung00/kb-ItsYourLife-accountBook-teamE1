@@ -8,12 +8,21 @@ export const useUsersStore = defineStore({
   }),
   // mutations, actions, getters
   actions: {
+    //사용자 세션 설정
     setUserId(userId) {
       this.userId = userId;
       console.log(this.userId);
     },
-    logout(){
+    logout() {
       this.userId = null;
-    }
+    },
   },
+
+  //사용자 세션 값 불러올때 사용
+  getters: {
+    getUserId() {
+      console.log(this.userId);
+      return this.userId;
+    }
+  }
 });
