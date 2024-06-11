@@ -1,3 +1,5 @@
+Header
+
 <template>
 <div class="header">
     <div id="gnb">
@@ -34,11 +36,13 @@
 
 <script>
 import {ref,computed} from 'vue';
+import { useTransactionsStore } from '../stores/TransactionsStore';
 
 export default {
 name: 'Header',
 
 setup() {
+    const transactionsStore = useTransactionsStore();
     const currentDate = new Date();
     const currentYear = ref(currentDate.getFullYear());
     const currentMonth = ref(currentDate.getMonth()+1);
@@ -52,8 +56,9 @@ setup() {
 
     const handleDateChange  = () => {
         currentYear.value = parseInt(selectedDate.value.split('-')[0])
-       currentMonth.value= parseInt(selectedDate.value.split('-')[1])
-
+        currentMonth.value= parseInt(selectedDate.value.split('-')[1])
+        const currentChangeDate = `${currentYear.value}-${currentMonth.value}`;
+        transactionsStore.setCurrentChangeDate(currentChangeDate); 
     }
 
 
@@ -71,6 +76,7 @@ setup() {
 
 <style scoped>
 .header{
+
     margin-top: 20px;
     justify-content: space-evenly;
     align-items: center;
@@ -80,8 +86,11 @@ setup() {
     left:0;
 
     width: 100%;
+    height: 15%;
 
+    background-color: white;
     border-bottom: 2px solid black;
+    z-index: 1000;
 }
 
 
@@ -113,7 +122,6 @@ img{
 }
 
 h3{
-    border: 1px solid black;
     cursor: pointer;
 }
 
@@ -126,3 +134,4 @@ a{
     width:20%;
 }
 </style>
+
