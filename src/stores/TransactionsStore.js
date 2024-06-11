@@ -3,8 +3,7 @@ import { defineStore } from 'pinia';
 export const useTransactionsStore = defineStore({
   id: 'transactionsStore',
   state: () => ({
-    // transactions state
-    transactions: []
+   transactions:[],
   }),
   // mutations, actions, getters
   mutations: () => ({

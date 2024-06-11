@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <header>
-            <h1>헤더 들어갈 자리</h1>
             <h1>거래내역 조회</h1>
         </header>
         <table class="transaction-table">
@@ -198,4 +197,5 @@ header {
     border-radius: 3px;
     padding: 5px;
 }
+
 </style>
