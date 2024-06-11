@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 
-export const useTransactionsStore = defineStore({
-  id: 'transactionsStore',
+export const useUsersStore = defineStore({
+  id: 'usersStore',
   state: () => ({
-    // transactions state
+    // users state
   }),
   // mutations, actions, getters
 });
