@@ -4,6 +4,7 @@ import Profile from '../pages/Profile.vue';
 import Setting from '../pages/Setting.vue';
 import TransactionsCreate from '../pages/TransactionsCreate.vue'
 import Login from '../pages/login.vue'
+import TransactionList from '../pages/TransactionList.vue';
 
 const routes = [
   //가계부 등록 라우터
@@ -31,6 +32,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/transactions/list',
+    name: 'TransactionList',
+    component: TransactionList
   }
 ]
 
