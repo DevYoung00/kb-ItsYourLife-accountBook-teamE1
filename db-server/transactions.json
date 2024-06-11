@@ -7,14 +7,6 @@
       "amount": 1000000,
       "memo": "월급",
       "userId": 1
-    },
-    {
-      "id": "2",
-      "category": "송금",
-      "date": "2024-06-06",
-      "amount": 333,
-      "memo": "333",
-      "userId": null
     }
   ]
 }
