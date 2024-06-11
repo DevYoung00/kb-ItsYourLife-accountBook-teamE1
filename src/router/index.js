@@ -8,9 +8,9 @@ import TransactionsCreate from '../pages/TransactionsCreate.vue'
 const routes = [
     //가계부 등록 라우터
     {
-    path: '/trans_create',
-    name: 'TransactionsCreate',
-    component : TransactionsCreate
+      path: '/transactions/create',
+      name: 'TransactionsCreate',
+      component: TransactionsCreate
     },
     {
         path: '/',
@@ -28,6 +28,7 @@ const routes = [
         component:Setting
     },
 ]
+
 const router = createRouter({
   history: createWebHistory(),
   routes
