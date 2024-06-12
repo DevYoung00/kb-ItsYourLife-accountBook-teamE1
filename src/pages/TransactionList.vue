@@ -11,6 +11,7 @@
                         카테고리
                         <button @click="toggleCategoryFilter()" class="filter-button">
                             <img src="../assets/funnel_3366201.png" alt="edit" width="20" />
+                            <br>
                             <div v-if="showCategory">
                                 <select name="category" id="category" v-model="categoryFilterValue"
                                     @change="filterTransactions">
@@ -28,11 +29,18 @@
                     <th>수정</th>
                     <th>삭제</th>
                     <th>
-                        <button @click="toggleDateFilter()" class="filter-button">
-                            <img src="../assets/calendar_981032.png" alt="datefilter" width="20" />
-                            <div v-if="showDate">
-                                <input type="date" v-model="dateFilterValue" @input="filterTransactions">
-                            </div>
+                        <button class="filter-button">
+                            <img @click="toggleDateFilter()" src="../assets/calendar_981032.png" alt="datefilter"
+                                width="20" />
+                            <button class="filter-button">
+                                <img @click="toggleDateFilter()" src="../assets/calendar_981032.png" alt="datefilter"
+                                    width="20" />
+                                >>>>>>> main
+                                <br>
+                                <div v-if="showDate">
+                                    <input type="date" v-model="dateFilterValue" @input="filterTransactions">
+                                </div>
+                            </button>
                         </button>
                     </th>
                 </tr>
@@ -47,98 +55,116 @@
 </template>
 
 <script>
-import axios from 'axios'
-import TransactionOne from '../components/TransactionOne.vue'
+import axios from 'axios';
+import { ref, computed, onMounted } from 'vue';
+import TransactionOne from '../components/TransactionOne.vue';
+import { useTransactionsStore } from '../stores/TransactionsStore';
 
 export default {
     name: 'TransactionList',
-    data() {
-        return {
-            transactions: [],
-            dateFilterValue: '',
-            categoryFilterValue: 'total', // 기본적으로 전체 카테고리 선택
-            showCategory: false,
-            showDate: false
-        }
-    },
     components: {
         TransactionOne
     },
-    computed: {
-        filteredTransactions() {
-            let filtered = this.transactions;
+    setup() {
+        const transactions = ref([]);
+        const dateFilterValue = ref('');
+        const categoryFilterValue = ref('total'); // 기본적으로 전체 카테고리 선택
+        const showCategory = ref(false);
+        const showDate = ref(false);
+
+        const transactionsStore = useTransactionsStore();
+
+        const formatDateString = (dateString) => {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`
+        }
+
+
+        const filteredTransactions = computed(() => {
+            let filtered = transactionsStore.transactions;
 
             // 카테고리 필터링
-            if (this.categoryFilterValue !== 'total') {
-                filtered = filtered.filter(transaction => transaction.category === this.categoryFilterValue);
+            if (categoryFilterValue.value !== 'total') {
+                filtered = filtered.filter(transaction => transaction.category === categoryFilterValue.value);
             }
 
             // 날짜 필터링
-            if (this.dateFilterValue) {
-                filtered = filtered.filter(transaction => transaction.date === this.dateFilterValue);
+            if (dateFilterValue.value) {
+                // filtered = filtered.filter(transaction => transaction.date === dateFilterValue.value);
+                const filterDate = formatDateString(dateFilterValue.value);
+                filtered = filtered.filter(transaction => {
+                    const transactionDate = formatDateString(transaction.date);
+                    return transactionDate === filterDate;
+                })
             }
 
             return filtered;
+        });
+
+
+        const fetchTransactions = async () => {
+            await transactionsStore.fetchTransactions();
+            transactions.value = transactionsStore.transactions;
         }
-    },
-    created() {
-        this.fetchTransactions()
-    },
-    methods: {
-        fetchTransactions() {
-            axios.get('http://localhost:3001/transactions')
-                .then(response => {
-                    this.transactions = response.data;
-                })
-                .catch(error => {
-                    alert(error)
-                })
-        },
 
-        updateTransaction(index, updatedTransaction) {
-            axios.put(`http://localhost:3000/transactions/${updatedTransaction.id}`, updatedTransaction)
-                .then(() => {
-                    this.transactions[index] = updatedTransaction;
-                    alert('수정 완료')
-                })
-                .catch(error => alert(error))
-        },
+        const updateTransaction = async (index, updatedTransaction) => {
+            await transactionsStore.updateTransaction(index, updatedTransaction);
+        }
 
-        removeTransaction(index, id) {
-            this.transactions.splice(index, 1);
-            axios.delete(`http://localhost:3000/transactions/${id}`)
-                .then(() => {
-                    this.fetchTransactions();
-                    console.log('Transaction deleted');
-                })
-                .catch(error => {
-                    alert(error)
-                });
-        },
+        const removeTransaction = async (index, id) => {
+            await transactionsStore.removeTransaction(index, id);
+        }
 
-        toggleCategoryFilter() {
-            this.showCategory = true;
-        },
+        const toggleCategoryFilter = () => {
+            showCategory.value = true;
+        };
 
-        toggleDateFilter() {
-            this.showDate = true;
-            if (!this.showDate) {
-                this.dateFilterValue = ''; // 날짜 필터링 해제
-                this.filterTransactions(); // 필터링 적용
-            }
-        },
-
-        filterTransactions() {
-            // 날짜 필터링 적용
-            if (this.dateFilterValue) {
-                this.transactions = this.transactions.filter(transaction => transaction.date === this.dateFilterValue);
+        const toggleDateFilter = () => {
+            if (showDate.value) {
+                showDate.value = false
             } else {
-                this.fetchTransactions(); // 날짜 필터링이 해제되면 모든 거래 다시 불러오기
+                showDate.value = true
             }
-        }
+            if (!showDate.value) {
+                dateFilterValue.value = ''; // 날짜 필터링 해제
+                filterTransactions(); // 필터링 적용
+            }
+        };
+
+        const filterTransactions = () => {
+            // 날짜 필터링 적용
+            if (dateFilterValue.value) {
+                transactions.value = transactions.value.filter(transaction => transaction.date === dateFilterValue.value);
+            } else {
+                fetchTransactions(); // 날짜 필터링이 해제되면 모든 거래 다시 불러오기
+            }
+        };
+
+        onMounted(() => {
+            fetchTransactions();
+        });
+
+        return {
+            transactions,
+            dateFilterValue,
+            categoryFilterValue,
+            showCategory,
+            showDate,
+            filteredTransactions,
+            fetchTransactions,
+            updateTransaction,
+            removeTransaction,
+            toggleCategoryFilter,
+            toggleDateFilter,
+            filterTransactions
+        };
     }
-}
+};
 </script>
+
 
 <style scoped>
 .container {
@@ -197,5 +223,4 @@ header {
     border-radius: 3px;
     padding: 5px;
 }
-
 </style>
