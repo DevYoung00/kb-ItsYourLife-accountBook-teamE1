@@ -30,8 +30,15 @@
             </table>
             </div>
             <div id="transaction-list-text-div">
-            <button type="button" class="btn btn-outline-secondary">추가</button>
+            <button type="button" class="btn btn-outline-secondary" id="show-transaction-create-btn" @click="showTransactionsForm = true">추가</button>
             <router-link to="/transactions/list">  <button type="button" class="btn btn-outline-secondary" id="current-transaction-btn">더보기</button></router-link>
+            </div>
+        </div>
+        <!-- 모달 창 -->
+        <div v-if="showTransactionsForm" class="modal">
+            <div class="modal-content">
+                <span class="modal-close" @click="showTransactionsForm = false" style="font-size: 50px;">&times;</span>
+                <TranscationsForm />
             </div>
         </div>
     </div>
@@ -98,6 +105,36 @@
 .table th, .table td {
   padding-left: 45px; 
   padding-right: 45px; 
+}
+/* 모달 스타일링 */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 500px;
+    max-height: 90%;
+    overflow-y: auto;
+    position: relative;
+}
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 1.5em;
 }
     </style>
     

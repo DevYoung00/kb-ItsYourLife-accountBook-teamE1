@@ -35,11 +35,14 @@ export const useTransactionsStore = defineStore({
       this.filterTransactionsByDate();
     },
 
-    // 날짜로 필터링 
+
+    // 선택한 날짜에 맞게 필터링
     filterTransactionsByDate() {
-      this.transactionsByDate = this.transactions.filter(transaction => 
-        transaction.date.startsWith(this.currentChangeDate)
-      );
-    }
+        const [year, month] = this.currentChangeDate.split('-').map(Number);
+        this.transactionsByDate = this.transactions.filter(transaction => {
+        const [transactionYear, transactionMonth] = transaction.date.split('-').map(Number);
+        return transactionYear === year && transactionMonth === month;
+        });
+      }
   }
 });

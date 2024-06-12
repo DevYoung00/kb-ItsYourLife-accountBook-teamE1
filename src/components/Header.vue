@@ -29,29 +29,39 @@ Header
             <p>설정</p>
         </div>
     </router-link>
-    <router-link to="/profile">
+
+    <router-link v-if="isLogin" to="/profile">
         <div id="profile-menu">
             <img src="../assets/profile_btn.png" alt="profilegBtn"/>
             <p>프로필</p>
         </div>
     </router-link>
-    </div>
+    <router-link v-else to="/login">
+        <div id="profile-menu">
+            <img src="../assets/profile_btn.png" alt="profilegBtn"/>
+            <p>로그인</p>
+        </div>
+    </router-link>
 
+    </div>
 </div>
 </template>
 
 <script>
-import {ref,computed} from 'vue';
+import {ref,computed,watch} from 'vue';
 import { useTransactionsStore } from '../stores/TransactionsStore';
+import {useUsersStore} from "../stores/UsersStore"
 
 export default {
 name: 'Header',
 
 setup() {
     const transactionsStore = useTransactionsStore();
+    const usersStore = useUsersStore();
     const currentDate = new Date();
     const currentYear = ref(currentDate.getFullYear());
     const currentMonth = ref(currentDate.getMonth()+1);
+    const isLogin = ref(true);
 
 
     const selectedMonth = computed(() => {
@@ -65,8 +75,12 @@ setup() {
         currentMonth.value= parseInt(selectedDate.value.split('-')[1])
         const currentChangeDate = `${currentYear.value}-${currentMonth.value}`;
         transactionsStore.setCurrentChangeDate(currentChangeDate); 
-    }
+    };
 
+    watch(() => usersStore.getUserId, (value) => {
+      if (value === "") isLogin = false;
+      else isLogin= true;
+    });
 
 
     return {
@@ -74,7 +88,8 @@ setup() {
         currentYear,
         currentMonth,
         handleDateChange,
-        selectedDate
+        selectedDate,
+        isLogin
     };
   }
 };
