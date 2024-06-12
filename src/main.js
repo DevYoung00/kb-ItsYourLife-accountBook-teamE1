@@ -1,6 +1,7 @@
 import { createApp, onMounted } from 'vue'
 import './style.css'
 import App from './App.vue'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js' 
 import 'bootstrap/dist/css/bootstrap.css'
 
 import { createPinia } from 'pinia'

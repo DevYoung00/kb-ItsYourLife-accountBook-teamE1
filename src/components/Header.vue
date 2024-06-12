@@ -10,10 +10,12 @@ Header
     </router-link>
     </div>
     <div id="header-date-picker" class="center">
+        <img src="../assets/left_btn.png" id="left_btn" @click="handleLeftBtn"/>
         <div id="date-picker-div">
             <h3>{{ selectedMonth }}</h3>
-            <input type="date" v-model="selectedDate" @change="handleDateChange">
+            <!-- <input type="date" v-model="selectedDate" @change="handleDateChange"> -->
         </div>
+        <img src="../assets/right_btn.png" id="right_btn" @click="handleRightBtn"/>
     </div>
 
     <div id="menu">
@@ -23,35 +25,45 @@ Header
             <p>거래추가</p>
         </div>
     </router-link>
-        <router-link to="/settings">
+        <router-link to="/transactions/list">
         <div id="setting-menu">
-            <img src="../assets/setting_btn.png" alt="settingBtn"/>
-            <p>설정</p>
+            <img src="../assets/trans_list_btn.png" alt="transBtn"/>
+            <p>거래내역</p>
         </div>
     </router-link>
-    <router-link to="/profile">
+
+    <router-link v-if="isLogin" to="/profile">
         <div id="profile-menu">
             <img src="../assets/profile_btn.png" alt="profilegBtn"/>
             <p>프로필</p>
         </div>
     </router-link>
-    </div>
+    <router-link v-else to="/login">
+        <div id="profile-menu">
+            <img src="../assets/profile_btn.png" alt="profilegBtn"/>
+            <p>로그인</p>
+        </div>
+    </router-link>
 
+    </div>
 </div>
 </template>
 
 <script>
-import {ref,computed} from 'vue';
+import {ref,computed,watch,onMounted} from 'vue';
 import { useTransactionsStore } from '../stores/TransactionsStore';
+import {useUsersStore} from "../stores/UsersStore"
 
 export default {
 name: 'Header',
 
 setup() {
     const transactionsStore = useTransactionsStore();
+    const usersStore = useUsersStore();
     const currentDate = new Date();
     const currentYear = ref(currentDate.getFullYear());
     const currentMonth = ref(currentDate.getMonth()+1);
+    const isLogin = ref(false);
 
 
     const selectedMonth = computed(() => {
@@ -61,20 +73,60 @@ setup() {
     const selectedDate = ref(`${currentYear.value}-${currentMonth.value}-${currentDate.getDate()}`);
 
     const handleDateChange  = () => {
-        currentYear.value = parseInt(selectedDate.value.split('-')[0])
-        currentMonth.value= parseInt(selectedDate.value.split('-')[1])
+       // currentYear.value = parseInt(selectedDate.value.split('-')[0])
+      //  currentMonth.value= parseInt(selectedDate.value.split('-')[1])
         const currentChangeDate = `${currentYear.value}-${currentMonth.value}`;
         transactionsStore.setCurrentChangeDate(currentChangeDate); 
+    };
+
+    const handleLeftBtn = () => {
+    console.log(currentMonth.value)
+    if (parseInt(currentMonth.value) === 1) {
+        currentYear.value--;
+        currentMonth.value = 12;
+    } else {
+        currentMonth.value--;
     }
+    handleDateChange()
+};
 
+const handleRightBtn = () => {
+    if (
+        parseInt(currentMonth.value) === parseInt(currentDate.getMonth() + 1) &&
+        parseInt(currentYear.value) === parseInt(currentDate.getFullYear())
+    ) {
+        alert("현재 날짜 이후로는 변경 불가능합니다.");
+    } else if (parseInt(currentMonth.value) === 12) {
+        currentMonth.value = 1;
+        currentYear.value++;
+    } else {
+        currentMonth.value++;
+    }
+    handleDateChange()
+};
 
+    watch(() => usersStore.getUserId, (value) => {
+        console.log("header",value)
+      if (value === "") isLogin.value = false;
+      else isLogin.value= true;
+    });
+
+    onMounted(()=>{
+        if(usersStore.getUserId === "") isLogin.value=false
+        else isLogin.value=true
+        console.log("header mounted ",usersStore.getUserId)
+        console.log("header mounted ",isLogin)
+    })
 
     return {
         selectedMonth,
         currentYear,
         currentMonth,
         handleDateChange,
-        selectedDate
+        selectedDate,
+        isLogin,
+        handleLeftBtn,
+        handleRightBtn
     };
   }
 };

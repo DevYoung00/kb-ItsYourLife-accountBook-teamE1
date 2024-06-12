@@ -19,11 +19,14 @@ export const useTransactionsStore = defineStore({
       this.filterTransactionsByDate();
     },
     // transaction get
-    async getTransaction(userId) {
+    async getTransaction() {
       try {
-        const response = await axios.get(`${url}?userId=${userId}`);
-        console.log("transaction:", response.data);
-        this.initTransactions(response.data);
+        const userStore = useUsersStore();
+        const userId = userStore.getUserId;
+        console.log("userId",userId);
+          const response = await axios.get(`${url}?userId=${userId}`);
+          console.log("transaction:", response.data);
+          this.initTransactions(response.data);
       } catch (error) {
         console.error("Error fetching transactions:", error);
         alert("거래 목록을 불러오는 중에 오류가 발생했습니다.");
@@ -47,12 +50,19 @@ export const useTransactionsStore = defineStore({
       this.filterTransactionsByDate();
     },
 
-    // 날짜로 필터링 
+
+    // 선택한 날짜에 맞게 필터링
     filterTransactionsByDate() {
-      this.transactionsByDate = this.transactions.filter(transaction =>
-        transaction.date.startsWith(this.currentChangeDate)
-      );
-    },
+        const [year, month] = this.currentChangeDate.split('-').map(Number);
+        this.transactionsByDate = this.transactions.filter(transaction => {
+        const [transactionYear, transactionMonth] = transaction.date.split('-').map(Number);
+        return transactionYear === year && transactionMonth === month;
+        });
+      // transactionsByDate 리스트를 날짜 내림차순으로 정렬
+      this.transactionsByDate.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+      },
 
     // 모든 거래 불러오기
     async fetchTransactions() {
@@ -122,5 +132,5 @@ export const useTransactionsStore = defineStore({
         alert("거래를 저장하는 중에 오류가 발생했습니다.");
       }
     }
-  }
+}
 });

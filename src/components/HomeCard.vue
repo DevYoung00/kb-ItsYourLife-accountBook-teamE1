@@ -57,10 +57,21 @@
             drawPieChart(dataList, id);
           });
         } else {
+          const transactionMap = new Map();
+          dataList.forEach(transaction => {
+              if (transactionMap.has(transaction.memo)) {
+                // memo 가 같으면 그 값에 추가 
+                transactionMap.set(transaction.memo, transactionMap.get(transaction.memo) + transaction.amount);
+              } else {
+                transactionMap.set(transaction.memo, transaction.amount);
+              }
+          });
+          const aggregatedDataList = Array.from(transactionMap.entries());
+
           const data = new google.visualization.DataTable();
           data.addColumn('string', 'memo');
           data.addColumn('number', 'Amount');
-          data.addRows(dataList.map(transaction => [transaction.memo, transaction.amount]));
+          data.addRows(aggregatedDataList);
           const options = {
                 backgroundColor: {
                     fill: 'transparent'
@@ -112,14 +123,12 @@
                         color: 'white'
                     }
                 },
-  
-              
             };
 
           const chart = new google.visualization.ColumnChart(document.getElementById('total-chart'));
           chart.draw(data, options);
         }
-  };
+    };
   
       watch(() => transactionsStore.transactionsByDate, (newTransactionsByDate) => {
         incomeList.value = [];
