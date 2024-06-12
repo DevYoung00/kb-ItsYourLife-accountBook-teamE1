@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="Transbody">
     <div class="container mt-5">
       <div class="mb-4">
         <h2 class="display-7 fw-bold">가계부 거래 등록</h2>
@@ -56,7 +56,7 @@ export default {
     });
 
     const handleSubmit = async () => {
-      await transactionsStore.addTransaction({ ...transaction}, router);
+      await transactionsStore.addTransaction({ ...transaction }, router);
       resetForm();
     };
 
@@ -64,12 +64,12 @@ export default {
     const handleCancel = () => {
       if (confirm("정말 취소하시겠습니까? 입력된 정보가 사라집니다.")) {
         resetForm();
-        
+
         //메인 화면으로 이동
         router.push('/');
         alert("입력이 취소되었습니다.");
       }
-      
+
     };
 
     const resetForm = () => {
@@ -89,6 +89,15 @@ export default {
 </script>
 
 <style scoped>
+.Transbody{
+  justify-content: space-evenly;
+  align-items: left;
+  position: fixed;
+  top: 150px;
+  left: 700px;
+  text-align: left;
+}
+
 textarea {
   height: 200px;
   width: 400px;

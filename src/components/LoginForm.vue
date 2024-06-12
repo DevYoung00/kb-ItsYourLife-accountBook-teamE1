@@ -5,20 +5,24 @@
         <div class="col-md-6">
           <div class="card">
             <div class="card-body">
-              <h2 class="card-title text-center">Login</h2>
+              <h2 class="card-title text-center">로그인</h2>
               <form @submit.prevent="login">
                 <div class="mb-3">
-                  <label for="username" class="form-label">Username</label>
-                  <input type="text" id="username" class="form-control" v-model="username" required />
+                  <label for="username" class="form-label">아이디</label>
+                  <input type="text" id="username" class="form-control" v-model="username" placeholder="아이디를 입력해주세요"
+                    required />
                 </div>
                 <div class="mb-3">
-                  <label for="password" class="form-label">Password</label>
-                  <input type="password" id="password" class="form-control" v-model="password" required />
+                  <label for="password" class="form-label">비밀번호</label>
+                  <input type="password" id="password" class="form-control" v-model="password"
+                    placeholder="비밀번호를 입력해주세요" required />
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
+                <button type="submit" class="btn btn-primary w-100">
+                  <p class="login-p">로그인</p>
+                </button>
               </form>
-              <br/>
-              <router-link to="/signup">회원가입</router-link>
+              <br />
+              <router-link to="/signup" class="router">회원가입</router-link>
             </div>
           </div>
         </div>
@@ -56,17 +60,73 @@ export default {
 
 <style scoped>
 .loginbody {
-  margin-top: 20px;
   justify-content: space-evenly;
   align-items: left;
   position: fixed;
-  top: 300px;
   left: 0;
   width: 100%;
+  margin: auto;
 }
 
+
 label {
+  font-size: 14px;
+  padding-bottom: 3px;
   display: block;
   margin-left: 0;
+  text-align: left;
+}
+
+h2 {
+  font-size: 25px;
+  padding-bottom: 10px;
+}
+
+button {
+  background-color: rgb(255, 204, 0);
+  border-color: rgb(255, 204, 0);
+}
+
+button:hover {
+  background-color: rgb(255, 188, 0);
+  border-color: rgb(255, 188, 0);
+}
+
+input:hover {
+  border-color: rgb(255, 204, 0);
+}
+
+/* input 태그 클릭 스타일 */
+input:focus {
+  border-color: rgb(255, 188, 0);
+
+  outline: none;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset;
+}
+
+input::placeholder {
+  font-size: 14px;
+}
+
+.router {
+  font-size: 12px;
+  text-align: center;
+  text-decoration-line: none;
+  /* 밑줄 없애기 */
+  color: rgb(255, 204, 0);
+}
+
+.login-p {
+  font-size: 14px;
+  margin: auto;
+}
+
+.card{
+  background-color: #ffffff;
+  box-shadow: 0 0 25px rgba(97, 97, 97, 0.2);
+  border:none;
 }
 </style>
