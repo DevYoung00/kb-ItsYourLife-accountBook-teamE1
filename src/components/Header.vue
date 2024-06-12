@@ -48,7 +48,7 @@ Header
 </template>
 
 <script>
-import {ref,computed,watch} from 'vue';
+import {ref,computed,watch,onMounted} from 'vue';
 import { useTransactionsStore } from '../stores/TransactionsStore';
 import {useUsersStore} from "../stores/UsersStore"
 
@@ -61,7 +61,7 @@ setup() {
     const currentDate = new Date();
     const currentYear = ref(currentDate.getFullYear());
     const currentMonth = ref(currentDate.getMonth()+1);
-    const isLogin = ref(true);
+    const isLogin = ref(false);
 
 
     const selectedMonth = computed(() => {
@@ -78,10 +78,17 @@ setup() {
     };
 
     watch(() => usersStore.getUserId, (value) => {
-      if (value === "") isLogin = false;
-      else isLogin= true;
+        console.log("header",value)
+      if (value === "") isLogin.value = false;
+      else isLogin.value= true;
     });
 
+    onMounted(()=>{
+        if(usersStore.getUserId === "") isLogin.value=false
+        else isLogin.value=true
+        console.log("header mounted ",usersStore.getUserId)
+        console.log("header mounted ",isLogin)
+    })
 
     return {
         selectedMonth,

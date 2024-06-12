@@ -49,6 +49,8 @@
     import {ref,onMounted,watch} from 'vue';
     import HomeCard from "../components/HomeCard.vue";
     import TranscationsForm from "../components/TranscationsForm.vue"
+    import {useUsersStore} from "../stores/UsersStore"
+    import { useRouter } from 'vue-router';
 
     export default {
         components:{
@@ -60,7 +62,10 @@
         const currentTransactionList = ref([]);
         const transactionsByDateList = ref([]);
         const transactionsStore = useTransactionsStore();
+        const usersStore = useUsersStore()
         const showTransactionsForm = ref(false);
+        const userId = ref('');
+        const router = useRouter();
 
         function updateTransactionLists(){
             transactionsList.value = transactionsStore.transactions;
@@ -71,8 +76,16 @@
         watch(() => transactionsStore.currentChangeDate, updateTransactionLists);
 
         onMounted(async () => {
-        await transactionsStore.getTransaction(1);
-        updateTransactionLists();
+        userId.value =  usersStore.getUserId
+        console.log()
+        if(userId.value===""){
+            router.push("/login")
+        }
+        else {
+            await transactionsStore.getTransaction();
+            updateTransactionLists();
+        }
+
         });
 
         return {
