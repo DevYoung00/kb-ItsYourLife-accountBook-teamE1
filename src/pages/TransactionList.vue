@@ -35,6 +35,7 @@
 import { ref, computed, onMounted } from 'vue';
 import TransactionOne from '../components/TransactionOne.vue';
 import { useTransactionsStore } from '../stores/TransactionsStore';
+import { useUsersStore } from '../stores/UsersStore'
 
 export default {
     name: 'TransactionList',
@@ -49,6 +50,7 @@ export default {
         const showDate = ref(false);
 
         const transactionsStore = useTransactionsStore();
+        const usersStore = useUsersStore();
 
         const formatDateString = (dateString) => {
             const date = new Date(dateString);
@@ -59,7 +61,7 @@ export default {
         }
 
         const filteredTransactions = computed(() => {
-            let filtered = transactionsStore.transactions;
+            let filtered = transactionsStore.transactions.filter(transaction => transaction.userId === usersStore.getUserId);
 
             // 카테고리 필터링
             if (categoryFilterValue.value !== 'total') {
