@@ -23,10 +23,10 @@ Header
             <p>거래추가</p>
         </div>
     </router-link>
-        <router-link to="/settings">
+        <router-link to="/transactions/list">
         <div id="setting-menu">
-            <img src="../assets/setting_btn.png" alt="settingBtn"/>
-            <p>설정</p>
+            <img src="../assets/trans_list_btn.png" alt="transBtn"/>
+            <p>거래내역</p>
         </div>
     </router-link>
 

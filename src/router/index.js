@@ -6,6 +6,7 @@ import TransactionsCreate from '../pages/TransactionsCreate.vue'
 import Login from '../pages/login.vue'
 import TransactionList from '../pages/TransactionList.vue';
 import Signup from '../pages/signup.vue';
+import { useUsersStore } from '../stores/UsersStore';
 
 const routes = [
   //가계부 등록 라우터
@@ -49,6 +50,17 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  const usersStore = useUsersStore();
+  const isLogin = !!usersStore.userId; 
+
+  if (!isLogin && to.name !== 'Login') {
+    next({ name: 'Login' });
+  } else {
+    next();
+  }
 });
 
 export default router;

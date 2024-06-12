@@ -60,6 +60,39 @@ export const useTransactionsStore = defineStore({
         });
       },
 
+    // 모든 거래 불러오기
+    async fetchTransactions() {
+      try {
+        const response = await axios.get(url);
+        this.transactions = response.data;
+      } catch (error) {
+        alert('거래를 불러오지 못했습니다.');
+      }
+    },
+
+    // 거래 수정
+    async updateTransaction(index, updatedTransaction) {
+      try {
+        await axios.put(`${url}/${updatedTransaction.id}`, updatedTransaction);
+        this.transactions[index] = updatedTransaction;
+        alert('수정 완료');
+      } catch (error) {
+        alert('수정하지 못했습니다.');
+      }
+    },
+
+    // 거래 삭제
+    async removeTransaction(index, id) {
+      try {
+        this.transactions.splice(index, 1);
+        await axios.delete(`${url}/${id}`);
+        this.fetchTransactions();
+        console.log('Transaction deleted');
+      } catch (error) {
+        alert('삭제하지 못했습니다.');
+      }
+    },
+
     //거래 등록
     async addTransaction(transaction, router) {
       try {
@@ -86,6 +119,10 @@ export const useTransactionsStore = defineStore({
           console.log("거래가 저장되었습니다:", newTransaction);
           alert("거래가 저장되었습니다.");
         }
+
+
+
+
       } catch (error) {
         console.error("거래를 저장하는 중에 오류가 발생했습니다:", error);
         alert("거래를 저장하는 중에 오류가 발생했습니다.");
