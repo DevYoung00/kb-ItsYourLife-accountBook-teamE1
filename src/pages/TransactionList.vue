@@ -86,7 +86,7 @@ export default {
     },
     methods: {
         fetchTransactions() {
-            axios.get('http://localhost:3000/transactions')
+            axios.get('http://localhost:3001/transactions')
                 .then(response => {
                     this.transactions = response.data;
                 })
