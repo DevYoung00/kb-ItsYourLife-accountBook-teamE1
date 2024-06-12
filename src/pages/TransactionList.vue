@@ -29,14 +29,18 @@
                     <th>수정</th>
                     <th>삭제</th>
                     <th>
-                        <button class="filter-button">
+                        <<<<<<< HEAD <button class="filter-button">
                             <img @click="toggleDateFilter()" src="../assets/calendar_981032.png" alt="datefilter"
                                 width="20" />
-                            <br>
-                            <div v-if="showDate">
-                                <input type="date" v-model="dateFilterValue" @input="filterTransactions">
-                            </div>
-                        </button>
+                            <button class="filter-button">
+                                <img @click="toggleDateFilter()" src="../assets/calendar_981032.png" alt="datefilter"
+                                    width="20" />
+                                >>>>>>> main
+                                <br>
+                                <div v-if="showDate">
+                                    <input type="date" v-model="dateFilterValue" @input="filterTransactions">
+                                </div>
+                            </button>
                     </th>
                 </tr>
             </thead>
@@ -98,6 +102,7 @@ export default {
 
             return filtered;
         });
+
 
         const fetchTransactions = async () => {
             await transactionsStore.fetchTransactions();
