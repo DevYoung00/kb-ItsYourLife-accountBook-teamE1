@@ -6,27 +6,29 @@
         <hr class="my-4">
       </div>
       <form @submit.prevent="handleSubmit">
-        <div class="form-group mb-3" >
-          <label for="date">날짜 선택</label>
-          <input type="date" id="date" v-model="transaction.date" class="form-control" required>
-        </div>
-        <div class="form-group mb-3">
-          <label for="amount">금액 입력</label>
-          <input type="number" id="amount" v-model="transaction.amount" class="form-control" required>
-        </div>
-        <div class="form-group mb-3">
-          <label for="category">카테고리 선택</label>
-          <select id="category" v-model="transaction.category" class="form-control" required>
-            <option value="" disabled>카테고리를 선택하세요</option>
-            <option value="입금">입금</option>
-            <option value="출금">출금</option>
-            <option value="송금">송금</option>
-            <option value="기타">기타</option>
-          </select>
-        </div>
-        <div class="form-group mb-3">
-          <label for="memo">메모 입력</label>
-          <textarea id="memo" v-model="transaction.memo" class="form-control"></textarea>
+        <div class="form-body">
+          <div class="form-group mb-3" id="select-date">
+            <label for="date">날짜 선택</label>
+            <input type="date" id="date" v-model="transaction.date" class="form-control" required>
+          </div>
+          <div class="form-group mb-3" id="select-amount">
+            <label for="amount">금액 입력</label>
+            <input type="number" id="amount" v-model="transaction.amount" class="form-control" required>
+          </div>
+          <div class="form-group mb-3">
+            <label for="category">카테고리 선택</label>
+            <select id="category" v-model="transaction.category" class="form-control" required>
+              <option value="" disabled>카테고리를 선택하세요</option>
+              <option value="입금">입금</option>
+              <option value="출금">출금</option>
+              <option value="송금">송금</option>
+              <option value="기타">기타</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="memo">메모 입력</label>
+            <textarea id="memo" v-model="transaction.memo" class="form-control"></textarea>
+          </div>
         </div>
         <div class="d-flex justify-content-center mb-3">
           <button type="submit" class="btn btn-primary me-3">저장</button>
@@ -88,21 +90,21 @@ export default {
 </script>
 
 <style scoped>
-.Transbody{
-  width: 100%;
+.Transbody {
+  width: 60%;
   justify-content: space-evenly;
   align-items: left;
   position: fixed;
   top: 150px;
-  left: 0;
+  left: 20%;
   text-align: left;
 }
 
-#body{
+#body {
   padding: 30px;
   background-color: #ffffff;
   box-shadow: 0 0 25px rgba(97, 97, 97, 0.2);
-  border:none;
+  border: none;
 }
 
 label {
@@ -115,17 +117,20 @@ label {
 
 textarea {
   height: 200px;
-  width: 400px;
+  width: 75%;
+  resize: none;
 }
 
 input,
 select {
-  width: 300px;
+  width: 30%;
+}
+input[type=date]{
+  width:100%;
 }
 
 h2 {
   font-size: 25px;
-  padding-bottom: 10px;
 }
 
 button {
@@ -139,13 +144,26 @@ button:hover {
   border-color: rgb(255, 188, 0);
 }
 
-input:hover, textarea:hover, select:hover{
+input:hover,
+textarea:hover,
+select:hover {
   border-color: rgb(255, 204, 0);
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   border-color: rgb(255, 188, 0);
 
   outline: none;
+}
+
+.form-body {
+  padding-left: 15%;
+}
+
+#select-date{
+  float:left;
+  padding-right:28%;
 }
 </style>
