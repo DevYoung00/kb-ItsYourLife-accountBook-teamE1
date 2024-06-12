@@ -14,6 +14,7 @@ import Header from "./components/Header.vue";
 
 <style scoped>
 #app {
+  width: 100%;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -25,6 +26,7 @@ import Header from "./components/Header.vue";
   padding-bottom: 100px;
   width: 100%;
   flex-grow: 1;
+  height: 100%; 
 }
 </style>
 
