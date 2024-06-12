@@ -17,10 +17,12 @@ import Header from "./components/Header.vue";
   display: flex;
   flex-direction: column;
   height: 100vh;
+  font-family: 'Pretendard', sans-serif;
 }
 
 #content {
-  margin-top: 120px; /* Adjust this value to the height of your header */
+  margin-top: 120px;
+  padding-bottom: 100px;
   width: 100%;
   flex-grow: 1;
 }

@@ -1,8 +1,13 @@
-Home
+
 <template>
     <div class="home">
+        <div id="summary-card">
+            <HomeCard :transactionsList="transactionsByDateList" />
+        </div>
+        <div>
+            <!-- <h2>거래 목록</h2> -->
+        </div>
         <div id="current-transaction-div">
-            <button type="button" id="current-transaction-btn" @click="showTransactionsForm = true">최근 거래 목록</button>
             
             <div id="current-transaction-table">
                 <table class="table">
@@ -17,18 +22,17 @@ Home
             <tbody>
                 <tr v-for="transaction in currentTransactionList" :key="transaction.id">
                     <td>{{ transaction.date }}</td>
-                    <td>{{ transaction.category }}</td>
+                    <td :style="{color: transaction.category === '입금' ? 'green' : (transaction.category === '출금' ? 'red' : 'blue') }">{{ transaction.category }}</td>
                     <td>{{ transaction.memo }}</td>
                     <td>{{ transaction.amount }}원</td>
                 </tr>
             </tbody>
             </table>
             </div>
-        </div>
-
-        <div id="summary-card">
-            <HomeCard :transactionsList="transactionsByDateList" />
-
+            <div id="transaction-list-text-div">
+            <button type="button" class="btn btn-outline-secondary">추가</button>
+            <router-link to="/transactions/list">  <button type="button" class="btn btn-outline-secondary" id="current-transaction-btn">더보기</button></router-link>
+            </div>
         </div>
     </div>
     </template>
@@ -54,7 +58,7 @@ Home
         function updateTransactionLists(){
             transactionsList.value = transactionsStore.transactions;
             transactionsByDateList.value = transactionsStore.transactionsByDate;
-            currentTransactionList.value = transactionsByDateList.value.slice(0, 2);
+            currentTransactionList.value = transactionsByDateList.value.slice(0, 4);
             console.log(transactionsByDateList.value)
         }
         watch(() => transactionsStore.currentChangeDate, updateTransactionLists);
@@ -75,11 +79,15 @@ Home
     
     
     <style scoped>
-    #current-transaction-btn{
-        background-color:#DAC182;
-        border-radius:20px;
-        width: 180px;
-        font-weight: bold;
+    #transaction-list-text-div{
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: center;
+    }
+    #transaction-list-text-div button{
+        margin-left: 5px;
+        margin-right:5px;
     }
 
     #current-transaction-table{

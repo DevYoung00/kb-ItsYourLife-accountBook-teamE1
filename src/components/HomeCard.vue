@@ -7,7 +7,7 @@
             <div id="income-chart" class="chart-container"></div>
             <div class="card-body">
               <h3 class="card-title">이번달 총수입</h3>
-              <p class="card-text">{{ incomeCount }}</p>
+              <h5 class="card-text">{{ incomeCount }}원</h5>
             </div>
           </div>
         </div>
@@ -17,17 +17,17 @@
             <div id="expense-chart" class="chart-container"></div>
             <div class="card-body">
               <h3 class="card-title">이번달 총지출</h3>
-              <p class="card-text">{{ expenseCount }}</p>
+              <h5 class="card-text">{{ expenseCount }}원</h5>
             </div>
           </div>
         </div>
   
         <div class="col">
           <div class="card" id="home-card-third">
-            <div id="income-chart" class="chart-container"></div>
+            <div id="total-chart" class="chart-container"></div>
             <div class="card-body" id="home-card-third-body">
               <h3 class="card-title">이번달 순수익</h3>
-              <p class="card-text">{{ totalCount }}</p>
+              <h5 class="card-text">{{ totalCount }}원</h5>
             </div>
           </div>
         </div>
@@ -39,10 +39,8 @@
   <script>
   import { useTransactionsStore } from '../stores/TransactionsStore';
   import { ref, watch } from 'vue';
-  
   export default {
     name: "HomeCard",
-  
     setup() {
       const transactionsStore = useTransactionsStore();
       const incomeList = ref([]);
@@ -50,26 +48,20 @@
       const incomeCount = ref(0);
       const expenseCount = ref(0);
       const totalCount = ref(0);
-  
-      const drawChart = (dataList, id) => {
-        const aggregatedData = {};
-        dataList.forEach(item => {
-            if (aggregatedData[item.memo]) {
-                aggregatedData[item.memo] += item.amount;
-            } else {
-                aggregatedData[item.memo] = item.amount;
-            }
-        });
-
-        const chartData = [['Memo', 'Amount']];
-        for (const [memo, amount] of Object.entries(aggregatedData)) {
-            chartData.push([memo, amount]);
-        }
-
-        google.charts.load('current', { 'packages': ['corechart'] });
-        google.charts.setOnLoadCallback(() => {
-            const data = google.visualization.arrayToDataTable(chartData);
-            const options = {
+      
+      // 원 그래프 - 수입, 지출
+      const drawPieChart = (dataList, id) => {
+        if (!google.visualization) {
+          google.charts.load('current', { 'packages': ['corechart'] });
+          google.charts.setOnLoadCallback(() => {
+            drawPieChart(dataList, id);
+          });
+        } else {
+          const data = new google.visualization.DataTable();
+          data.addColumn('string', 'memo');
+          data.addColumn('number', 'Amount');
+          data.addRows(dataList.map(transaction => [transaction.memo, transaction.amount]));
+          const options = {
                 backgroundColor: {
                     fill: 'transparent'
                 },
@@ -79,15 +71,55 @@
                     width: '100%',
                     height: '100%'
                 },
-                pieHole: 0.4, // 이 옵션은 도넛 차트로 만들어줍니다. 0으로 설정하면 일반 파이 차트가 됩니다.
-                width: '100%', // 차트의 너비를 부모 요소에 맞춤
-                height: '100%' // 차트의 높이를 부모 요소에 맞춤
+                pieHole: 0.4,
+                width: '100%',
+                height: '100%',
+                legend: 'none' 
             };
-            const chart = new google.visualization.PieChart(document.getElementById(id));
-            chart.draw(data, options);
-        });
-};
+          const chart = new google.visualization.PieChart(document.getElementById(id));
+          chart.draw(data, options);
+        }
+    };
 
+    // 막대 그래프 - 순수익
+    const drawColumnChart = (incomeCount, expenseCount,totalCount) => {
+        if (!google.visualization) {
+          google.charts.load('current', { 'packages': ['corechart'] });
+          google.charts.setOnLoadCallback(() => {
+            drawColumnChart(incomeCount, expenseCount,totalCount);
+          });
+        } else {
+          var data = google.visualization.arrayToDataTable([
+            ['카테고리', '금액', { role:'style' }],
+            ['수입', incomeCount,'#4FD36C'],
+            ['지출', expenseCount,'#F29886'],
+            ['순수익', totalCount,'#4B89DC']
+          ]);
+          const options = {
+                backgroundColor: {
+                    fill: 'transparent'
+                },
+                width: '100%',
+                height: '100%',
+                legend:'none',
+                hAxis: {
+                textStyle:{
+                    color: 'white'
+                  }
+                },
+                vAxis: {
+                    textStyle:{
+                        color: 'white'
+                    }
+                },
+  
+              
+            };
+
+          const chart = new google.visualization.ColumnChart(document.getElementById('total-chart'));
+          chart.draw(data, options);
+        }
+  };
   
       watch(() => transactionsStore.transactionsByDate, (newTransactionsByDate) => {
         incomeList.value = [];
@@ -104,8 +136,9 @@
           }
         });
         totalCount.value = incomeCount.value - expenseCount.value;
-        drawChart(incomeList.value, 'income-chart');
-        drawChart(expenseList.value,'expense-chart')
+        drawPieChart(incomeList.value, 'income-chart');
+        drawPieChart(expenseList.value,'expense-chart')
+        drawColumnChart(incomeCount.value,expenseCount.value, totalCount.value)
       });
   
       return {
@@ -120,6 +153,9 @@
   </script>
   
   <style scoped>
+  .chart-container{
+    margin-right:100px;
+  }
   .card {
     margin: 30px;
   }
@@ -142,21 +178,21 @@
   
   .chart-container {
     width: 100%;
-    height: 300px; /* 차트의 높이를 지정 */
+    height: 300px; 
     display: flex;
     justify-content: center;
     align-items: center;
   }
   
-  @media (max-width: 768px) {
+  @media (max-width: 750px) {
     .chart-container {
-      height: 200px; /* 작은 화면에서는 차트 높이를 조정 */
+      height: 200px;
     }
   }
   
   @media (max-width: 576px) {
     .chart-container {
-      height: 150px; /* 더 작은 화면에서는 차트 높이를 더 조정 */
+      height: 150px; 
     }
   }
   </style>

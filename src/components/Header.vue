@@ -17,6 +17,12 @@ Header
     </div>
 
     <div id="menu">
+        <router-link to="/transactions/create">
+        <div id="create-menu">
+            <img src="../assets/create_btn.png" alt="createBtn"/>
+            <p>거래추가</p>
+        </div>
+    </router-link>
         <router-link to="/settings">
         <div id="setting-menu">
             <img src="../assets/setting_btn.png" alt="settingBtn"/>
@@ -112,7 +118,7 @@ img{
     height: 60px;
 }
 
-#setting-menu{
+#setting-menu, #create-menu{
     margin-right: 80px;
 }
 
