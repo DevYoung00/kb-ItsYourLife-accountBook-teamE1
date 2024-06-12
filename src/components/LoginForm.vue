@@ -41,7 +41,7 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await axios.get(`http://localhost:3002/users`);
+        const response = await axios.get(`http://localhost:3001/users`);
         const user = response.data.find(user => user.username === this.username && user.password === this.password);
         if (user) {
           const userStore = useUsersStore();
