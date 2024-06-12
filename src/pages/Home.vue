@@ -35,13 +35,15 @@
             </div>
         </div>
         <!-- 모달 창 -->
-        <div v-if="showTransactionsForm" class="modal">
+        <div v-if="showTransactionsForm" class="modal"  @click.self="showTransactionsForm = false">
             <div class="modal-content">
                 <span class="modal-close" @click="showTransactionsForm = false" style="font-size: 50px;">&times;</span>
                 <TranscationsForm />
             </div>
         </div>
+        
     </div>
+    
     </template>
     
     <script>

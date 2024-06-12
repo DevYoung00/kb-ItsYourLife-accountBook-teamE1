@@ -6,30 +6,36 @@
     <hr class="custom-hr"/>
 
     <div id="profile-body">
-        <!-- 이메일 -->
-        <div id="profile-body-text">
-            <h5 id="profile-first-text">이메일</h5>
-            <h5 id="profile-second-text">{{userInfo.email}}</h5>
-        </div>
+        <div id="profile-info-full">
+            <!-- 이메일 -->
+            <div id="profile-info-left">
+                <div id="profile-body-text">
+                    <h5 id="profile-first-text">이메일</h5>
+                    <h5 id="profile-second-text">{{userInfo.email}}</h5>
+                </div>
 
-        <!-- 성별 -->
-        <div id="profile-body-text">
-            <h5 id="profile-first-text">성별</h5>
-            <h5 id="profile-second-text">{{userInfo.gender}}</h5>
-        </div>
+                <!-- 성별 -->
+                <div id="profile-body-text">
+                    <h5 id="profile-first-text">성별</h5>
+                    <h5 id="profile-second-text">{{userInfo.gender}}</h5>
+                </div>
 
-        <!-- 생년월일 -->
-        <div id="profile-body-text">
-            <h5 id="profile-first-text">생년월일</h5>
-            <h5 id="profile-second-text">{{userInfo.birth}}</h5>
-        </div>
+                <!-- 생년월일 -->
+                <div id="profile-body-text">
+                    <h5 id="profile-first-text">생년월일</h5>
+                    <h5 id="profile-second-text">{{userInfo.birth}}</h5>
+                </div>
 
-        <!-- 전화번호 -->
-        <div id="profile-body-text">
-            <h5 id="profile-first-text">전화번호</h5>
-            <h5 id="profile-second-text">{{userInfo.phone}}</h5>
+                <!-- 전화번호 -->
+                <div id="profile-body-text">
+                    <h5 id="profile-first-text">전화번호</h5>
+                    <h5 id="profile-second-text">{{userInfo.phone}}</h5>
+                </div>
+            </div>
+        <div id="profile-info-right">
+            <router-link to="/settings"><button type="button" class="btn btn-secondary" id="update-button">회원 정보 관리</button></router-link>
         </div>
-
+        </div>
         <div id="logout-div">
             <button type="button" class="btn btn-danger" id="logout-button" @click="logout">로그아웃</button>
         </div>
@@ -140,6 +146,15 @@ select{
 }
 .custom-hr {
   height: 2px;
+}
+
+#profile-info-full{
+    display: flex;
+    justify-content: space-between;
+}
+
+#profile-info-left{
+    width: 60%;
 }
 
 @media screen and (max-width: 600px) {
