@@ -1,48 +1,25 @@
 <template>
+    <div>
+        <select name="category" id="category" v-model="categoryFilterValue" @change="filterTransactions"
+            class="form-select">
+            <option value="total">카테고리 선택</option>
+            <option value="입금">입금</option>
+            <option value="출금">출금</option>
+            <option value="송금">송금</option>
+            <option value="기타">기타</option>
+        </select>
+        <input type="date" v-model="dateFilterValue" @input="filterTransactions" class="form-control">
+    </div>
     <div class="container">
-        <header>
-            <h1>거래내역 조회</h1>
-        </header>
-        <table class="transaction-table">
+        <table class="table transaction-table">
             <thead>
                 <tr>
                     <th>날짜</th>
-                    <th>
-                        카테고리
-                        <button @click="toggleCategoryFilter()" class="filter-button">
-                            <img src="../assets/funnel_3366201.png" alt="edit" width="20" />
-                            <br>
-                            <div v-if="showCategory">
-                                <select name="category" id="category" v-model="categoryFilterValue"
-                                    @change="filterTransactions">
-                                    <option value="total">전체</option>
-                                    <option value="입금">입금</option>
-                                    <option value="출금">출금</option>
-                                    <option value="송금">송금</option>
-                                    <option value="기타">기타</option>
-                                </select>
-                            </div>
-                        </button>
-                    </th>
+                    <th>카테고리</th>
                     <th>금액</th>
                     <th>메모</th>
                     <th>수정</th>
                     <th>삭제</th>
-                    <th>
-                        <button class="filter-button">
-                            <img @click="toggleDateFilter()" src="../assets/calendar_981032.png" alt="datefilter"
-                                width="20" />
-                            <button class="filter-button">
-                                <img @click="toggleDateFilter()" src="../assets/calendar_981032.png" alt="datefilter"
-                                    width="20" />
-                                >>>>>>> main
-                                <br>
-                                <div v-if="showDate">
-                                    <input type="date" v-model="dateFilterValue" @input="filterTransactions">
-                                </div>
-                            </button>
-                        </button>
-                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -55,7 +32,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { ref, computed, onMounted } from 'vue';
 import TransactionOne from '../components/TransactionOne.vue';
 import { useTransactionsStore } from '../stores/TransactionsStore';
@@ -82,7 +58,6 @@ export default {
             return `${year}-${month}-${day}`
         }
 
-
         const filteredTransactions = computed(() => {
             let filtered = transactionsStore.transactions;
 
@@ -93,7 +68,6 @@ export default {
 
             // 날짜 필터링
             if (dateFilterValue.value) {
-                // filtered = filtered.filter(transaction => transaction.date === dateFilterValue.value);
                 const filterDate = formatDateString(dateFilterValue.value);
                 filtered = filtered.filter(transaction => {
                     const transactionDate = formatDateString(transaction.date);
@@ -103,7 +77,6 @@ export default {
 
             return filtered;
         });
-
 
         const fetchTransactions = async () => {
             await transactionsStore.fetchTransactions();
@@ -119,15 +92,11 @@ export default {
         }
 
         const toggleCategoryFilter = () => {
-            showCategory.value = true;
+            showCategory.value = !showCategory.value;
         };
 
         const toggleDateFilter = () => {
-            if (showDate.value) {
-                showDate.value = false
-            } else {
-                showDate.value = true
-            }
+            showDate.value = !showDate.value;
             if (!showDate.value) {
                 dateFilterValue.value = ''; // 날짜 필터링 해제
                 filterTransactions(); // 필터링 적용
@@ -165,7 +134,6 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .container {
     max-width: 800px;
@@ -173,30 +141,14 @@ export default {
     padding: 20px;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
 .transaction-table {
     width: 100%;
     border-collapse: collapse;
     font-family: 'Arial', sans-serif;
-    background-color: rgb(239, 255, 8);
+    table-layout: fixed;
 }
 
-.transaction-table th,
-.transaction-table td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.transaction-table th {
-    background-color: #f2f2f2;
-    color: #333;
-}
-
+/* 필터 버튼 스타일 수정 */
 .filter-button {
     background: none;
     border: none;
@@ -210,17 +162,5 @@ header {
 .filter-button div {
     display: inline-block;
     vertical-align: middle;
-}
-
-.filter-button select {
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 5px;
-}
-
-.filter-button input[type="date"] {
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 5px;
 }
 </style>

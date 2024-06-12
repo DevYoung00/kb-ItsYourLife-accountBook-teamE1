@@ -10,10 +10,12 @@ Header
     </router-link>
     </div>
     <div id="header-date-picker" class="center">
+        <img src="../assets/left_btn.png" id="left_btn" @click="handleLeftBtn"/>
         <div id="date-picker-div">
             <h3>{{ selectedMonth }}</h3>
-            <input type="date" v-model="selectedDate" @change="handleDateChange">
+            <!-- <input type="date" v-model="selectedDate" @change="handleDateChange"> -->
         </div>
+        <img src="../assets/right_btn.png" id="right_btn" @click="handleRightBtn"/>
     </div>
 
     <div id="menu">
@@ -71,11 +73,37 @@ setup() {
     const selectedDate = ref(`${currentYear.value}-${currentMonth.value}-${currentDate.getDate()}`);
 
     const handleDateChange  = () => {
-        currentYear.value = parseInt(selectedDate.value.split('-')[0])
-        currentMonth.value= parseInt(selectedDate.value.split('-')[1])
+       // currentYear.value = parseInt(selectedDate.value.split('-')[0])
+      //  currentMonth.value= parseInt(selectedDate.value.split('-')[1])
         const currentChangeDate = `${currentYear.value}-${currentMonth.value}`;
         transactionsStore.setCurrentChangeDate(currentChangeDate); 
     };
+
+    const handleLeftBtn = () => {
+    console.log(currentMonth.value)
+    if (parseInt(currentMonth.value) === 1) {
+        currentYear.value--;
+        currentMonth.value = 12;
+    } else {
+        currentMonth.value--;
+    }
+    handleDateChange()
+};
+
+const handleRightBtn = () => {
+    if (
+        parseInt(currentMonth.value) === parseInt(currentDate.getMonth() + 1) &&
+        parseInt(currentYear.value) === parseInt(currentDate.getFullYear())
+    ) {
+        alert("현재 날짜 이후로는 변경 불가능합니다.");
+    } else if (parseInt(currentMonth.value) === 12) {
+        currentMonth.value = 1;
+        currentYear.value++;
+    } else {
+        currentMonth.value++;
+    }
+    handleDateChange()
+};
 
     watch(() => usersStore.getUserId, (value) => {
         console.log("header",value)
@@ -96,7 +124,9 @@ setup() {
         currentMonth,
         handleDateChange,
         selectedDate,
-        isLogin
+        isLogin,
+        handleLeftBtn,
+        handleRightBtn
     };
   }
 };

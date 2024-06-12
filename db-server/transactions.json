@@ -71,6 +71,14 @@
       "amount": 40000,
       "memo": "의류",
       "userId": "user1"
+    },
+    {
+      "id": "10",
+      "category": "입금",
+      "date": "2024-05-12",
+      "amount": 2000000,
+      "memo": "월급",
+      "userId": "user1"
     }
   ]
 }

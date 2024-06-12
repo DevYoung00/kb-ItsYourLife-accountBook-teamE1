@@ -58,6 +58,10 @@ export const useTransactionsStore = defineStore({
         const [transactionYear, transactionMonth] = transaction.date.split('-').map(Number);
         return transactionYear === year && transactionMonth === month;
         });
+      // transactionsByDate 리스트를 날짜 내림차순으로 정렬
+      this.transactionsByDate.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
       },
 
     // 모든 거래 불러오기
