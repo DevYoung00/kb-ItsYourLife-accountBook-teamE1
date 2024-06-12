@@ -27,16 +27,3 @@ import Header from "./components/Header.vue";
   flex-grow: 1;
 }
 </style>
-
-<script>
-import TransactionList from './pages/TransactionList.vue'
-
-export default {
-  name: 'App',
-  components: {
-    TransactionList
-  }
-}
-
-</script>
-
