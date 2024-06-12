@@ -4,7 +4,7 @@ export const useUsersStore = defineStore({
   id: 'usersStore',
   state: () => ({
     //사용자 아이디 초기 상태
-    userId: null,
+    userId: "",
   }),
   // mutations, actions, getters
   actions: {
@@ -14,7 +14,7 @@ export const useUsersStore = defineStore({
       console.log(this.userId);
     },
     logout() {
-      this.userId = null;
+      this.userId = "";
     },
   },
 
