@@ -1,13 +1,12 @@
 <template>
   <div class="Transbody">
-    <div class="container mt-5">
+    <div class="container mt-5" id="body">
       <div class="mb-4">
         <h2 class="display-7 fw-bold">가계부 거래 등록</h2>
         <hr class="my-4">
       </div>
-      <form @submit.prevent="handleSubmit"
-        style="background-color: rgba(255, 165, 0, 0.3); padding: 20px; border-radius: 10px;">
-        <div class="form-group mb-3">
+      <form @submit.prevent="handleSubmit">
+        <div class="form-group mb-3" >
           <label for="date">날짜 선택</label>
           <input type="date" id="date" v-model="transaction.date" class="form-control" required>
         </div>
@@ -90,11 +89,27 @@ export default {
 
 <style scoped>
 .Transbody{
+  width: 100%;
   justify-content: space-evenly;
   align-items: left;
   position: fixed;
   top: 150px;
-  left: 700px;
+  left: 0;
+  text-align: left;
+}
+
+#body{
+  padding: 30px;
+  background-color: #ffffff;
+  box-shadow: 0 0 25px rgba(97, 97, 97, 0.2);
+  border:none;
+}
+
+label {
+  font-size: 14px;
+  padding-bottom: 3px;
+  display: block;
+  margin-left: 0;
   text-align: left;
 }
 
@@ -106,5 +121,31 @@ textarea {
 input,
 select {
   width: 300px;
+}
+
+h2 {
+  font-size: 25px;
+  padding-bottom: 10px;
+}
+
+button {
+  width: 100px;
+  background-color: rgb(255, 204, 0);
+  border-color: rgb(255, 204, 0);
+}
+
+button:hover {
+  background-color: rgb(255, 188, 0);
+  border-color: rgb(255, 188, 0);
+}
+
+input:hover, textarea:hover, select:hover{
+  border-color: rgb(255, 204, 0);
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: rgb(255, 188, 0);
+
+  outline: none;
 }
 </style>
