@@ -29,7 +29,7 @@
                     <th>수정</th>
                     <th>삭제</th>
                     <th>
-                        <<<<<<< HEAD <button class="filter-button">
+                        <button class="filter-button">
                             <img @click="toggleDateFilter()" src="../assets/calendar_981032.png" alt="datefilter"
                                 width="20" />
                             <button class="filter-button">
@@ -41,6 +41,7 @@
                                     <input type="date" v-model="dateFilterValue" @input="filterTransactions">
                                 </div>
                             </button>
+                        </button>
                     </th>
                 </tr>
             </thead>
