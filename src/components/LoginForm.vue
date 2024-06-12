@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { useUsersStore } from '../stores/UsersStore';
 
 export default {
@@ -40,21 +39,15 @@ export default {
   },
   methods: {
     async login() {
-      try {
-        const response = await axios.get(`http://localhost:3001/users`);
-        const user = response.data.find(user => user.username === this.username && user.password === this.password);
-        if (user) {
-          const userStore = useUsersStore();
-          userStore.setUserId(this.username);
-          alert('로그인에 성공하였습니다.');
-          //나중에 홈화면으로 이동하도록 수정 필요, 현재는 가계부 거래 등록 화면으로 넘어가도록 설정
-          this.$router.push('/transactions/create');
-        } else {
-          alert('아이디/패스워드를 다시 한번 확인 부탁드립니다.');
-        }
-      } catch (error) {
-        console.error('Error logging in:', error);
-        alert('예기치 않은 오류로 실패하였습니다.');
+      const userStore = useUsersStore();
+      const result = await userStore.login(this.username, this.password);
+      if (result.success) {
+        alert(result.message);
+
+        //추후 메인 페이지로 이동하도록 수정
+        this.$router.push('/transactions/create');
+      } else {
+        alert(result.message);
       }
     }
   }
