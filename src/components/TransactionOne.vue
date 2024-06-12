@@ -1,50 +1,52 @@
 <template>
-        <tr>
-            <td>{{ transaction.date }}</td>
-            <td>{{ transaction.category }}</td>
-            <td>{{ transaction.amount }}</td>
-            <td>{{ transaction.memo }}</td>
-            <td>
-                <img @click="editTransaction" src="../assets/edit_9457213.png" alt="edit" width="30" />
-            </td>
-            <td>
-                <img @click="deleteTransaction(transaction.id)" src="../assets/delete_12236920.png" alt="delete"
-                    width="30" />
-            </td>
-        </tr>
+    <tr>
+        <td>{{ transaction.date }}</td>
+        <td>{{ transaction.category }}</td>
+        <td>{{ transaction.amount }}</td>
+        <td>{{ transaction.memo }}</td>
+        <td>
+            <img @click="editTransaction" src="../assets/edit_9457213.png" alt="edit" width="30" />
+        </td>
+        <td>
+            <img @click="deleteTransaction(transaction.id)" src="../assets/delete_12236920.png" alt="delete"
+                width="30" />
+        </td>
+    </tr>
 
-        <div v-if="showModal" class="modal-overlay" @click="closeModal">
-            <div class="modal-content" @click.stop>
-                <h2>거래 수정</h2>
-                <label for="date">Date:</label>
-                <input v-model="editedTransaction.date" id="date" type="date" />
+    <div v-if="showModal" class="modal-overlay" @click="closeModal">
+        <div class="modal-content" @click.stop>
+            <h2>거래 수정</h2>
+            <label for="date">Date:</label>
+            <input v-model="editedTransaction.date" id="date" type="date" />
 
-                <label for="category">Category:</label>
-                <select v-model="editedTransaction.category">
-                    <option value="입금">입금</option>
-                    <option value="출금">출금</option>
-                    <option value="송금">송금</option>
-                    <option value="기타">기타</option>
-                </select>
+            <label for="category">Category:</label>
+            <select v-model="editedTransaction.category">
+                <option value="입금">입금</option>
+                <option value="출금">출금</option>
+                <option value="송금">송금</option>
+                <option value="기타">기타</option>
+            </select>
 
-                <label for="amount">Amount:</label>
-                <input v-model="editedTransaction.amount" id="amount" type="number" />
+            <label for="amount">Amount:</label>
+            <input v-model="editedTransaction.amount" id="amount" type="number" />
 
-                <label for="memo">Memo:</label>
-                <input v-model="editedTransaction.memo" id="memo" />
+            <label for="memo">Memo:</label>
+            <input v-model="editedTransaction.memo" id="memo" />
 
-                <div class="modal-buttons">
-                    <button @click="saveChanges">저장</button>
-                    <button @click="closeModal">닫기</button>
-                </div>
+            <div class="modal-buttons">
+                <button @click="saveChanges">저장</button>
+                <button @click="closeModal">닫기</button>
             </div>
         </div>
+    </div>
 </template>
 
 <script>
-import axios from 'axios';
+import { ref, reactive } from 'vue';
+import { useTransactionsStore } from '../stores/TransactionsStore';
 
 export default {
+    name: 'TransactionComponent',
     props: {
         transaction: {
             type: Object,
@@ -55,40 +57,48 @@ export default {
             required: true
         }
     },
-    data() {
-        return {
-            showModal: false,
-            editedTransaction: {
-                id: null,
-                date: '',
-                category: '',
-                amount: '',
-                memo: '',
-            }
+    setup(props, { emit }) {
+        const transactionsStore = useTransactionsStore();
+
+        const showModal = ref(false);
+        const editedTransaction = reactive({
+            id: null,
+            date: '',
+            category: '',
+            amount: '',
+            memo: ''
+        });
+
+        const editTransaction = () => {
+            Object.assign(editedTransaction, { ...props.transaction });
+            showModal.value = true;
         };
-    },
-    methods: {
-        editTransaction() {
-            this.editedTransaction = { ...this.transaction }
-            this.showModal = true;
-        },
 
-        deleteTransaction(id) {
-            this.$emit('transaction-delete', this.index, id);
-        },
+        const deleteTransaction = (id) => {
+            emit('transaction-delete', props.index, id);
+        };
 
-        saveChanges() {
-            // 변경 내용 저장
-            this.$emit('transaction-update', this.index, this.editedTransaction);
-            this.closeModal();
-        },
+        const saveChanges = () => {
+            emit('transaction-update', props.index, editedTransaction);
+            closeModal();
+        };
 
-        closeModal() {
-            this.showModal = false;
-        }
+        const closeModal = () => {
+            showModal.value = false;
+        };
+
+        return {
+            showModal,
+            editedTransaction,
+            editTransaction,
+            deleteTransaction,
+            saveChanges,
+            closeModal
+        };
     }
 };
 </script>
+
 
 <style scoped>
 .modal-overlay {
