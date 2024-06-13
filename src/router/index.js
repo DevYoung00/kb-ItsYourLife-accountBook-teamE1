@@ -6,6 +6,7 @@ import TransactionsCreate from '../pages/TransactionsCreate.vue'
 import Login from '../pages/login.vue'
 import TransactionList from '../pages/TransactionList.vue';
 import Signup from '../pages/signup.vue';
+import Chart from '../pages/Chart.vue'
 import { useUsersStore } from '../stores/UsersStore';
 
 const routes = [
@@ -44,7 +45,13 @@ const routes = [
     path: '/transactions/list',
     name: 'TransactionList',
     component: TransactionList
-  }
+  },
+  {
+    path: '/chart',
+    name: 'Chart',
+    component: Chart
+  },
+
 ]
 
 const router = createRouter({

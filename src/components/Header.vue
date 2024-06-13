@@ -1,12 +1,17 @@
-Header
-
 <template>
 <div class="header">
     <div id="gnb">
         <router-link to="/">
         <div id="home-btn">
             <img src="../assets/home_btn.png" alt="homeBtn"/>
+            <p>홈</p>
         </div>
+    </router-link>
+    <router-link to="/chart">
+        <div id="chart-btn">
+        <img src="../assets/chart_btn.png" alt="chartBtn"/>
+        <p>통계</p>
+    </div>
     </router-link>
     </div>
     <div id="header-date-picker" class="center">
@@ -170,6 +175,9 @@ img{
     margin:15px;
     height: 60px;
 }
+#chart-btn{
+    margin-left: 30px;
+}
 
 #setting-menu, #create-menu{
     margin-right: 80px;
@@ -193,4 +201,5 @@ a{
     width:20%;
 }
 </style>
+
 
