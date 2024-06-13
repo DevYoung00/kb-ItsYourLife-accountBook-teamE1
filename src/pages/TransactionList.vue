@@ -43,15 +43,17 @@ export default {
         TransactionOne
     },
     setup() {
-        const transactions = ref([]);
-        const dateFilterValue = ref('');
-        const categoryFilterValue = ref('total'); // 기본적으로 전체 카테고리 선택
-        const showCategory = ref(false);
-        const showDate = ref(false);
+        const transactions = ref([]);               // 전체 트랜잭션 리스트
+        const dateFilterValue = ref('');            // 날짜 필터링 값
+        const categoryFilterValue = ref('total');   // 기본적으로 전체 카테고리 선택
+        const showCategory = ref(false);            // 카테고리 필터링 UI 표시 여부
+        const showDate = ref(false);                // 날짜 필터링 UI 표시 여부
 
-        const transactionsStore = useTransactionsStore();
-        const usersStore = useUsersStore();
+        // Stores
+        const transactionsStore = useTransactionsStore();       // 트랜잭션 스토어
+        const usersStore = useUsersStore();                     // 사용자 스토어
 
+        // 날짜 문자열 형식 변환 함수
         const formatDateString = (dateString) => {
             const date = new Date(dateString);
             const year = date.getFullYear();
@@ -60,7 +62,10 @@ export default {
             return `${year}-${month}-${day}`
         }
 
+        // 필터링된 트랜잭션 계산
         const filteredTransactions = computed(() => {
+
+            // 현재 로그인한 사용자에 해당하는 트랜잭션 필터링
             let filtered = transactionsStore.transactions.filter(transaction => transaction.userId === usersStore.getUserId);
 
             // 카테고리 필터링
@@ -80,31 +85,23 @@ export default {
             return filtered;
         });
 
+        // 트랜잭션 목록 가져오기
         const fetchTransactions = async () => {
             await transactionsStore.fetchTransactions();
             transactions.value = transactionsStore.transactions;
         }
 
+        // 트랜잭션 업데이트
         const updateTransaction = async (index, updatedTransaction) => {
             await transactionsStore.updateTransaction(index, updatedTransaction);
         }
 
+        // 트랜잭션 삭제
         const removeTransaction = async (index, id) => {
             await transactionsStore.removeTransaction(index, id);
         }
 
-        const toggleCategoryFilter = () => {
-            showCategory.value = !showCategory.value;
-        };
-
-        const toggleDateFilter = () => {
-            showDate.value = !showDate.value;
-            if (!showDate.value) {
-                dateFilterValue.value = ''; // 날짜 필터링 해제
-                filterTransactions(); // 필터링 적용
-            }
-        };
-
+        // 필터링 적용 함수
         const filterTransactions = () => {
             // 날짜 필터링 적용
             if (dateFilterValue.value) {
@@ -114,6 +111,7 @@ export default {
             }
         };
 
+        // 컴포넌트가 마운트될 때 트랜잭션 목록 가져오기
         onMounted(() => {
             fetchTransactions();
         });
@@ -128,8 +126,6 @@ export default {
             fetchTransactions,
             updateTransaction,
             removeTransaction,
-            toggleCategoryFilter,
-            toggleDateFilter,
             filterTransactions
         };
     }

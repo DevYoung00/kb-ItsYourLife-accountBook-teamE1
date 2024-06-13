@@ -53,50 +53,61 @@
 
 <script>
 import { ref, reactive } from 'vue';
-import { useTransactionsStore } from '../stores/TransactionsStore';
 
 export default {
     name: 'TransactionComponent',
     props: {
+        // 트랜잭션 객체를 해당 컴포넌트에서 받음
         transaction: {
-            type: Object,
-            required: true
+            type: Object,           // transaction prop의 타입은 객체
+            required: true          // transaction prop은 필수
         },
+        // 트랜잭션의 인덱스
         index: {
-            type: Number,
-            required: true
+            type: Number,           // index prop의 타입은 숫자
+            required: true          // 필수
         }
     },
     setup(props, { emit }) {
-        const transactionsStore = useTransactionsStore();
 
-        const showModal = ref(false);
+        const showModal = ref(false);               // 모달 창 표시 여부
         const editedTransaction = reactive({
-            id: null,
-            date: '',
-            category: '',
-            amount: '',
-            memo: ''
+            id: null,                               // 수정 중인 트랜잭션의 ID
+            date: '',                               // 수정 중인 트랜잭션의 날짜
+            category: '',                           // 수정 중인 트랜잭션의 카테고리
+            amount: '',                             // 수정 중인 트랜잭션의 금액
+            memo: ''                                // 수정 중인 트랜잭션의 메모
         });
 
+        // 트랜잭션 수정 함수
         const editTransaction = () => {
+
+            // 현재 트랜잭션 정보를 수정할 트랜잭션 객체에 복사
             Object.assign(editedTransaction, { ...props.transaction });
             showModal.value = true;
         };
 
+        // 트랜잭션 삭제 함수
         const deleteTransaction = (id) => {
+            
+            // 상위 컴포넌트에 알림
             emit('transaction-delete', props.index, id);
         };
 
+        // 수정 사항 저장 함수
         const saveChanges = () => {
+            
+            // 상위 컴폰넌트에 알림
             emit('transaction-update', props.index, editedTransaction);
             closeModal();
         };
 
+        // 모달창 닫기 함수
         const closeModal = () => {
             showModal.value = false;
         };
 
+        // 짝수 줄 여부 확인
         const isEven = (index) => {
             return index % 2 === 0;
         };
