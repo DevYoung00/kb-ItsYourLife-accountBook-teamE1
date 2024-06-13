@@ -1,4 +1,5 @@
 <template>
+    <!-- 카테고리 필터, 날짜 필터 -->
     <div>
         <select name="category" id="category" v-model="categoryFilterValue" @change="filterTransactions"
             class="form-select">
@@ -10,10 +11,12 @@
         </select>
         <input type="date" v-model="dateFilterValue" @input="filterTransactions" class="form-control">
     </div>
+    <!-- 트랜잭션 테이블 -->
     <div class="container">
         <table class="table transaction-table">
             <thead>
                 <tr>
+                    <!-- 테이블 헤더 -->
                     <th>날짜</th>
                     <th>카테고리</th>
                     <th>금액</th>
@@ -23,6 +26,9 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- 트랜잭션 리스트 -->
+                <!-- @transaction-delete="removeTransaction": TransactionOne 컴포넌트에서 transcation-delete 이벤트가 발생할 때 removeTransaction method 호출 (삭제할 트랜잭션의 인덱스와 ID를 전달받음) -->
+                <!-- @transaction-update="updateTransaction": TransacitonOne 컴포넌트에서 updateTransaction method 호출, 업데이트할 트랜잭션의 인덱스와 수정된 트랜잭션 객체를 전달받음 -->
                 <TransactionOne v-for="(transaction, idx) in filteredTransactions" :key="transaction.id"
                     :transaction="transaction" :index="idx" @transaction-delete="removeTransaction"
                     @transaction-update="updateTransaction" />
