@@ -57,35 +57,11 @@
       "userId": "user1"
     },
     {
-      "id": "8",
-      "category": "출금",
-      "date": "2024-06-12",
-      "amount": 7000,
-      "memo": "간식",
-      "userId": "user1"
-    },
-    {
-      "id": "9",
-      "category": "출금",
-      "date": "2024-06-12",
-      "amount": 40000,
-      "memo": "의류",
-      "userId": "user1"
-    },
-    {
-      "id": "10",
-      "category": "입금",
-      "date": "2024-05-12",
-      "amount": 2000000,
-      "memo": "월급",
-      "userId": "user1"
-    },
-    {
-      "id": "11",
-      "category": "출금",
+      "id": 8,
+      "category": "송금",
       "date": "2024-06-13",
-      "amount": 1200,
-      "memo": "교통비",
+      "amount": 3333,
+      "memo": "정산",
       "userId": "user1"
     }
   ]
