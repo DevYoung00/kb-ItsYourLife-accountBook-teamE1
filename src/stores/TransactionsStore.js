@@ -114,7 +114,7 @@ export const useTransactionsStore = defineStore({
           alert("로그인 후 사용 바랍니다.")
           router.push('/login');
         } else {
-          const newTransaction = { id: newPostId.toString(), ...transaction, userId };
+          const newTransaction = { id: newPostId, ...transaction, userId };
 
           await axios.post(`${url}`, newTransaction);
           this.transactions.push(newTransaction);
