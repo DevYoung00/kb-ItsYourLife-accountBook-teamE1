@@ -39,7 +39,7 @@
         <div id="logout-div">
             <button type="button" class="btn btn-danger" id="logout-button" @click="logout">로그아웃</button>
         </div>
-        <div id="app-setting-header">
+        <!-- <div id="app-setting-header">
             <h3>앱설정</h3>
             <hr class="custom-hr"/>
             <div id="language-setting">
@@ -53,7 +53,7 @@
         </div>
         <div id="complete-div">
             <button type="button" class="btn btn-primary" id="complete-button">설정</button>
-        </div>
+        </div> -->
     </div>
 
 </div>
