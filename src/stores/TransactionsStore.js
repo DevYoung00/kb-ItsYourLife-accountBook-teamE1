@@ -4,6 +4,9 @@ import { useUsersStore } from './UsersStore';
 
 const url = "http://localhost:3002/transactions";
 
+/**
+ * 거래 관련 상태 및 액션을 관리하는 스토어
+ */
 export const useTransactionsStore = defineStore({
   id: 'transactionsStore',
   state: () => ({
@@ -33,10 +36,14 @@ export const useTransactionsStore = defineStore({
       }
     },
 
-    //전체 거래 목록 불러오는 함수
+    /**
+     * 전체 거래 목록 불러오는 함수
+     * @async
+     */
     async fetchTransactions() {
       try {
         const response = await axios.get(`${url}`);
+        //받아온 데이터 state에 저장
         this.transactions = response.data;
       } catch (error) {
         console.error("Error fetching transactions:", error);
@@ -97,12 +104,17 @@ export const useTransactionsStore = defineStore({
       }
     },
 
-    //거래 등록
+    /**
+     * 거래 등록 함수
+     * @param {Object} transaction
+     * @param {Object} router
+     * @async
+     */
     async addTransaction(transaction, router) {
       try {
         //Json-server의 마지막 id 값 불러옴
         const lastTransaction = this.transactions[this.transactions.length - 1];
-        const lastPostId = lastTransaction ? lastTransaction.id : 0;
+        const lastPostId = lastTransaction ? lastTransaction.id : 0; //마지막 데이터 존재 여부 확인 및 존재하지 않을 경우 id 값 0으로 설정
         const newPostId = Number(lastPostId) + 1;
 
         const userStore = useUsersStore();
@@ -115,7 +127,7 @@ export const useTransactionsStore = defineStore({
           router.push('/login');
         } else {
           const newTransaction = { id: newPostId, ...transaction, userId };
-
+          //json-server에 값 전달 후 저장 요청
           await axios.post(`${url}`, newTransaction);
           this.transactions.push(newTransaction);
 

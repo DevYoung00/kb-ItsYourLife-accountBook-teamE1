@@ -3,22 +3,37 @@ import axios from 'axios';
 
 const url = "http://localhost:3001/users"
 
+/**
+ * 사용자 관련 상태 및 액션을 관리하는 스토어.
+ */
 export const useUsersStore = defineStore({
   id: 'usersStore',
   state: () => ({
-    //사용자 아이디 초기 상태
+    /**
+     * 사용자 아이디 초기 상태.
+     * @type {String}
+     */
     userId: "",
     userInfo : {},
   }),
   // mutations, actions, getters
   actions: {
-    //사용자 세션 설정
+    /**
+     * 사용자 세션 저장
+     * @param {String} userId
+     */
     setUserId(userId) {
       this.userId = userId;
       console.log(this.userId);
     },
     
-    //로그인 실행 함수
+     /**
+     * 로그인 실행 함수
+     * @param {String} username - 아이디
+     * @param {String} password - 비밀번호
+     * @returns {Object} 로그인 성공 여부 및 결과 메시지.
+     * @async
+     */
     async login(username, password) {
       try {
         const response = await axios.get(`${url}`);
@@ -75,8 +90,11 @@ export const useUsersStore = defineStore({
 
   },
 
-  //사용자 세션 값 불러올때 사용
   getters: {
+    /**
+     * 세션으로 저장된 아이디 값 불러옴
+     * @returns {String} 사용자 아이디.
+     */
     getUserId() {
       console.log(this.userId);
       return this.userId;

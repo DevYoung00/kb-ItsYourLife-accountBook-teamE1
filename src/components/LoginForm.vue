@@ -39,11 +39,26 @@ import { useUsersStore } from '../stores/UsersStore';
 export default {
   data() {
     return {
+      /**
+       * 사용자 입력 아이디
+       * @type {String}
+       */
       username: '',
+
+      /**
+       * 사용자 입력 패스워드
+       * @type {String}
+       */
       password: ''
     };
   },
   methods: {
+    /**
+     * 로그인 함수.
+     * UsersStore의 login 함수를 호출하여 로그인 처리
+     * 로그인 성공 시 메인 페이지로 이동, 실패 시 경고 메시지를 표시
+     * @async
+     */
     async login() {
       const userStore = useUsersStore(); 
       //UsersStore의 로그인 함수 호출 

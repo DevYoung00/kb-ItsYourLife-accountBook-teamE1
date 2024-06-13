@@ -46,13 +46,23 @@ import { useRouter } from 'vue-router';
 import { useTransactionsStore } from '../stores/TransactionsStore';
 
 export default {
-  // emit 코드 추가 
+  /**
+   * 이벤트 emit 정의
+   * @emits transactionAdded
+   */
   emits: ['transactionAdded'], 
   setup(_, { emit }){
     const transactionsStore = useTransactionsStore();
     const router = useRouter();
 
-    //반응형 객체 생성
+    /**
+     * 거래 정보를 저장하는 반응형 객체
+     * @type {Object}
+     * @property {String} category - 거래 카테고리
+     * @property {String} date - 거래 날짜
+     * @property {String} amount - 거래 금액
+     * @property {String} memo - 거래 메모
+     */
     const transaction = reactive({
       category: '',
       date: '',
@@ -60,8 +70,12 @@ export default {
       memo: ''
     });
 
+    /**
+     * 거래 등록 함수
+     * @async
+     */
     const handleSubmit = async () => {
-      //TransactionsStore의 거래 추가 함수 호출
+      //TransactionsStore의 거래 등록 함수 호출
       await transactionsStore.addTransaction({ ...transaction }, router);
       resetForm();
       emit('transactionAdded');
@@ -79,6 +93,9 @@ export default {
 
     };
 
+    /**
+     * 입력 폼을 초기화하는 함수입니다.
+     */
     const resetForm = () => {
       transaction.date = '';
       transaction.amount = '';
