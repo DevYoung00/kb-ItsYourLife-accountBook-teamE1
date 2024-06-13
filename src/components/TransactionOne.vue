@@ -146,4 +146,9 @@ export default {
     display: block;
     background-color: rgba(0, 0, 0, 0.5);
 }
+
+.table-primary {
+    --bs-table-bg: #ffcc00;
+}
+
 </style>
