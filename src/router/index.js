@@ -56,7 +56,7 @@ router.beforeEach((to, from, next) => {
   const usersStore = useUsersStore();
   const isLogin = !!usersStore.userId; 
 
-  if (!isLogin && to.name !== 'Login') {
+  if (!isLogin && to.name !== 'Login' && to.name !== 'Signup') {
     next({ name: 'Login' });
   } else {
     next();
