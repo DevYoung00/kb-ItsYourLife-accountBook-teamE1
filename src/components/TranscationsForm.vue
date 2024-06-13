@@ -50,6 +50,7 @@ export default {
     const transactionsStore = useTransactionsStore();
     const router = useRouter();
 
+    //반응형 객체 생성
     const transaction = reactive({
       category: '',
       date: '',
