@@ -17,6 +17,16 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
+    "concurrently": "^8.2.2",
+    "json-server": "^1.0.0-beta.1",
     "vite": "^5.2.13"
+  },
+  "scripts": {
+    "dev": "concurrently \"vite\" \"npm run json-server-users\" \"npm run json-server-transactions\" \"npm run json-server-settings\"",
+    "serve": "vite preview",
+    "build": "vite build",
+    "json-server-users": "json-server --watch ./db-server/users.json --port 3001",
+    "json-server-transactions": "json-server --watch ./db-server/transactions.json --port 3002",
+    "json-server-settings": "json-server --watch ./db-server/settings.json --port 3003"
   }
 }
