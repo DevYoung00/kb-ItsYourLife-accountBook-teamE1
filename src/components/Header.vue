@@ -56,8 +56,8 @@ import {useUsersStore} from "../stores/UsersStore"
 
 export default {
 name: 'Header',
-
-setup() {
+emits: ['update-date'],     // 날짜 업데이트 이벤트
+setup(props, { emit }) {
     const transactionsStore = useTransactionsStore();
     const usersStore = useUsersStore();
     const currentDate = new Date();
@@ -76,7 +76,8 @@ setup() {
        // currentYear.value = parseInt(selectedDate.value.split('-')[0])
       //  currentMonth.value= parseInt(selectedDate.value.split('-')[1])
         const currentChangeDate = `${currentYear.value}-${currentMonth.value}`;
-        transactionsStore.setCurrentChangeDate(currentChangeDate); 
+        transactionsStore.setCurrentChangeDate(currentChangeDate);
+        emit('update-date', {year:  currentYear.value, month: currentMonth.value})
     };
 
     const handleLeftBtn = () => {

@@ -71,16 +71,6 @@ export const useTransactionsStore = defineStore({
       });
       },
 
-    // 모든 거래 불러오기
-    async fetchTransactions() {
-      try {
-        const response = await axios.get(url);
-        this.transactions = response.data;
-      } catch (error) {
-        alert('거래를 불러오지 못했습니다.');
-      }
-    },
-
     // 거래 수정
     async updateTransaction(index, updatedTransaction) {
       try {
