@@ -1,9 +1,13 @@
 <template>
+    <!-- Header 컴포넌트 렌더링, update-date 이벤트를 처리해서 updateDate method 호출 -->
+    <div>
+        <Header @update-date="updateDate" />
+    </div>
     <!-- 카테고리 필터, 날짜 필터 -->
     <div>
         <select name="category" id="category" v-model="categoryFilterValue" @change="filterTransactions"
             class="form-select">
-            <option value="total">카테고리 선택</option>
+            <option value="total">전체 카테고리</option>
             <option value="입금">입금</option>
             <option value="출금">출금</option>
             <option value="송금">송금</option>
@@ -42,18 +46,21 @@ import { ref, computed, onMounted } from 'vue';
 import TransactionOne from '../components/TransactionOne.vue';
 import { useTransactionsStore } from '../stores/TransactionsStore';
 import { useUsersStore } from '../stores/UsersStore'
+import Header from '../components/Header.vue';
 
 export default {
     name: 'TransactionList',
     components: {
-        TransactionOne
+        TransactionOne,
+        Header
     },
     setup() {
         const transactions = ref([]);               // 전체 트랜잭션 리스트
         const dateFilterValue = ref('');            // 날짜 필터링 값
         const categoryFilterValue = ref('total');   // 기본적으로 전체 카테고리 선택
-        const showCategory = ref(false);            // 카테고리 필터링 UI 표시 여부
-        const showDate = ref(false);                // 날짜 필터링 UI 표시 여부
+
+        const selectedYear = ref('2024');               // 선택된 연도
+        const selectedMonth = ref('06');              // 선택된 월
 
         // Stores
         const transactionsStore = useTransactionsStore();       // 트랜잭션 스토어
@@ -72,7 +79,7 @@ export default {
         const filteredTransactions = computed(() => {
 
             // 현재 로그인한 사용자에 해당하는 트랜잭션 필터링
-            let filtered = transactionsStore.transactions.filter(transaction => transaction.userId === usersStore.getUserId);
+            let filtered = transactions.value.filter(transaction => transaction.userId === usersStore.getUserId);
 
             // 카테고리 필터링
             if (categoryFilterValue.value !== 'total') {
@@ -88,12 +95,25 @@ export default {
                 })
             }
 
+            // 현재 선택된 연도와 월에 해당하는 거래만 필터링
+            filtered = filtered.filter(transaction => {
+                const transactionDate = new Date(transaction.date);
+                return transactionDate.getFullYear() === parseInt(selectedYear.value) && transactionDate.getMonth() + 1 === parseInt(selectedMonth.value);
+            })
+
+            // 날짜를 기준으로 내림차순 정렬
+            filtered.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return dateB - dateA;
+            });
+
             return filtered;
         });
 
         // 트랜잭션 목록 가져오기
         const fetchTransactions = async () => {
-            await transactionsStore.fetchTransactions();
+            await transactionsStore.getTransaction();
             transactions.value = transactionsStore.transactions;
         }
 
@@ -105,6 +125,21 @@ export default {
         // 트랜잭션 삭제
         const removeTransaction = async (index, id) => {
             await transactionsStore.removeTransaction(index, id);
+        }
+
+        // 연도 및 월 업데이트
+        const updateDate = ({ year, month }) => {
+            selectedYear.value = year;
+            selectedMonth.value = month;
+
+            // 특정 연도와 월에 해당하는 거래들을 필터링
+            const filtered = transactionsStore.transactions.filter(transaction => {
+                const transactionDate = new Date(transaction.date);         // 거래의 날짜를 Date 객체로 변환
+                return transactionDate.getFullYear() === parseInt(year) && transactionDate.getMonth() + 1 === parseInt(month);      // 거래의 월이 주어진 month와 일치하는지 확인
+            });
+
+            transactions.value = filtered
+
         }
 
         // 필터링 적용 함수
@@ -126,13 +161,14 @@ export default {
             transactions,
             dateFilterValue,
             categoryFilterValue,
-            showCategory,
-            showDate,
             filteredTransactions,
             fetchTransactions,
             updateTransaction,
             removeTransaction,
-            filterTransactions
+            filterTransactions,
+            selectedYear,
+            selectedMonth,
+            updateDate
         };
     }
 };
