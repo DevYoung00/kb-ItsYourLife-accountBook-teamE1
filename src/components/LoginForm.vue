@@ -9,11 +9,13 @@
               <form @submit.prevent="login">
                 <div class="mb-3">
                   <label for="username" class="form-label">아이디</label>
+                  <!--사용자가 입력한 아이디(username) 바인딩-->
                   <input type="text" id="username" class="form-control" v-model="username" placeholder="아이디를 입력해주세요"
                     required />
                 </div>
                 <div class="mb-3">
                   <label for="password" class="form-label">비밀번호</label>
+                  <!--사용자가 입력한 패스워드(password) 바인딩-->
                   <input type="password" id="password" class="form-control" v-model="password"
                     placeholder="비밀번호를 입력해주세요" required />
                 </div>
@@ -43,13 +45,14 @@ export default {
   },
   methods: {
     async login() {
-      const userStore = useUsersStore();
+      const userStore = useUsersStore(); 
+      //UsersStore의 로그인 함수 호출 
       const result = await userStore.login(this.username, this.password);
       if (result.success) {
         alert(result.message);
 
-        //추후 메인 페이지로 이동하도록 수정
-        this.$router.push('/transactions/create');
+        //로그인 후 메인 페이지로 이동
+        this.$router.push('/');
       } else {
         alert(result.message);
       }

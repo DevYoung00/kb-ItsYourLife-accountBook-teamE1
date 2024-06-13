@@ -5,6 +5,7 @@
         <h2 class="display-7 fw-bold">가계부 거래 등록</h2>
         <hr class="my-4">
       </div>
+      <!--저장 버튼 클릭시, handelSubmit함수 호출-->
       <form @submit.prevent="handleSubmit">
         <div class="form-body">
           <div class="form-group mb-3" id="select-date">
@@ -57,6 +58,7 @@ export default {
     });
 
     const handleSubmit = async () => {
+      //TransactionsStore의 거래 추가 함수 호출
       await transactionsStore.addTransaction({ ...transaction }, router);
       resetForm();
     };
@@ -156,6 +158,12 @@ select:focus {
   border-color: rgb(255, 188, 0);
 
   outline: none;
+}
+
+input::-webkit-inner-spin-button {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
 }
 
 .form-body {

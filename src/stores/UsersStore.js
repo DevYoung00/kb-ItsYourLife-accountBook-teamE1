@@ -17,6 +17,8 @@ export const useUsersStore = defineStore({
       this.userId = userId;
       console.log(this.userId);
     },
+    
+    //로그인 실행 함수
     async login(username, password) {
       try {
         const response = await axios.get(`${url}`);
@@ -33,6 +35,7 @@ export const useUsersStore = defineStore({
       }
     },
 
+    //로그아웃 시, 세션 삭제
     logout() {
       this.userId = "";
     },
