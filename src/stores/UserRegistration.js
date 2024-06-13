@@ -1,3 +1,4 @@
+
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import router from '../router'; 
@@ -25,8 +26,10 @@ export const useUserRegistrationStore = defineStore({
       try {
         const response = await axios.get(`${url}?username=${username}`);
         if (response.data.length === 0) {
+          this.usernameCheck = true; // 사용 가능한 아이디
           alert('사용 가능한 아이디입니다.');
         } else {
+          this.usernameCheck = false; // 이미 사용 중인 아이디
           alert('이미 사용 중인 아이디입니다.');
         }
       } catch (error) {
@@ -39,8 +42,10 @@ export const useUserRegistrationStore = defineStore({
       try {
         const response = await axios.get(`${url}?email=${email}`);
         if (response.data.length === 0) {
+          this.emailCheck = true; // 사용 가능한 이메일
           alert('사용 가능한 이메일입니다.');
         } else {
+          this.emailCheck = false; // 이미 사용 중인 이메일
           alert('이미 사용 중인 이메일입니다.');
         }
       } catch (error) {

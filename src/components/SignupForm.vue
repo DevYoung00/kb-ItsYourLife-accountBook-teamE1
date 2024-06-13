@@ -3,7 +3,6 @@
     <h2 class="text-center">회원가입</h2>
     <form @submit.prevent="submitForm">
 
-
       <!-- 아이디 입력 부분-->
       <div class="form-group row">
         <label for="username" class="col-sm-3 col-form-label">아이디</label>
@@ -65,10 +64,12 @@
           </select>
         </div>
         <div class="col-sm-2">
-          <input type="text" class="form-control" v-model="phone2">
+          <input type="text" class="form-control" v-model="phone2" @input="validatePhone2">
+          <div v-if="phone2Error" class="text-danger">숫자만 입력이 가능합니다.</div>
         </div>
         <div class="col-sm-2">
-          <input type="text" class="form-control" v-model="phone3">
+          <input type="text" class="form-control" v-model="phone3" @input="validatePhone3">
+          <div v-if="phone3Error" class="text-danger">숫자만 입력이 가능합니다.</div>
         </div>
       </div>
       
@@ -111,6 +112,9 @@
 import { useUserRegistrationStore } from '../stores/UserRegistration';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router'; 
+import axios from 'axios';
+
+const url = "http://localhost:3001/users";
 
 export default {
   setup() {
@@ -130,8 +134,59 @@ export default {
     const pwerrcheck = ref(true);
     const usernameCheck = ref(null);
     const emailCheck = ref(null);
+    const phone2Error = ref(false);
+    const phone3Error = ref(false);
+
+    // 숫자만 입력되도록 유효성 검사
+    const numberRegex = /^[0-9]*$/;
+
+    // phone2 입력 제한 함수 (숫자만 가능하고 문자는 불가능하게 만듬, 최대 4자리)
+    const validatePhone2 = () => {
+      if (!numberRegex.test(phone2.value)) {
+        phone2.value = phone2.value.replace(/\D/g, ''); 
+        phone2Error.value = true;
+      } else {
+        phone2Error.value = false;
+ 
+        if (phone2.value.length > 4) {
+          phone2.value = phone2.value.slice(0, 4);
+        }
+      }
+    };
+
+    // phone3 입력 제한 함수 (숫자만 가능하고 문자는 불가능하게 만듬, 최대 4자리)
+    const validatePhone3 = () => {
+      if (!numberRegex.test(phone3.value)) {
+        phone3.value = phone3.value.replace(/\D/g, ''); 
+        phone3Error.value = true;
+      } else {
+        phone3Error.value = false;
+
+        if (phone3.value.length > 4) {
+          phone3.value = phone3.value.slice(0, 4);
+        }
+      }
+    };
+
+
+    const passwordCheckValid = () => {
+      pwerrcheck.value = password.value === pwcheck.value;
+    };
+
 
     const submitForm = async () => {
+
+      if (!isFormValid()) {
+        alert('모든 필수 입력 항목을 채워주세요.');
+        return;
+      }
+
+      // 아이디 중복 확인 함수
+      if (!usernameCheck.value) {
+        alert('아이디 중복을 확인해주세요.');
+        return;
+      }
+
       const userData = {
         username: username.value,
         password: password.value,
@@ -145,16 +200,55 @@ export default {
       await userRegistrationStore.registerUser(userData);
     };
 
-    const checkUsername = async () => {
-      await userRegistrationStore.checkUsername(username.value);
+        // 아이디 중복 확인 함수
+        const checkUsername = async () => {
+      try {
+        const response = await axios.get(`${url}?username=${username.value}`);
+        if (response.data.length === 0) {
+          usernameCheck.value = true; // 사용 가능한 아이디
+          alert('사용 가능한 아이디입니다.');
+        } else {
+          usernameCheck.value = false; // 이미 사용 중인 아이디
+          alert('이미 사용 중인 아이디입니다.');
+        }
+      } catch (error) {
+        console.error('아이디 중복 확인 오류:', error);
+        alert('아이디 중복 확인에 실패하였습니다.');
+      }
     };
 
+    // 이메일 중복 확인 함수
     const checkEmail = async () => {
-      await userRegistrationStore.checkEmail(email.value);
+      try {
+        const response = await axios.get(`${url}?email=${email.value}`);
+        if (response.data.length === 0) {
+          emailCheck.value = true; // 사용 가능한 이메일
+          alert('사용 가능한 이메일입니다.');
+        } else {
+          emailCheck.value = false; // 이미 사용 중인 이메일
+          alert('이미 사용 중인 이메일입니다.');
+        }
+      } catch (error) {
+        console.error('이메일 중복 확인 오류:', error);
+        alert('이메일 중복 확인에 실패하였습니다.');
+      }
     };
 
-    const passwordCheckValid = () => {
-      pwerrcheck.value = password.value === pwcheck.value;
+    // 입력항목이 모두 채워져 있는지 확인하는 함수, 채워지 있지 않을 시 회원가입 불가
+    const isFormValid = () => {
+      return (
+        username.value &&
+        password.value &&
+        pwcheck.value &&
+        pwerrcheck.value &&
+        name.value &&
+        email.value &&
+        phone1.value &&
+        phone2.value &&
+        phone3.value &&
+        birth.value &&
+        gender.value
+      );
     };
 
     return {
@@ -174,12 +268,19 @@ export default {
       submitForm,
       checkUsername,
       checkEmail,
-      passwordCheckValid
+      passwordCheckValid,
+      validatePhone2,
+      validatePhone3,
+      phone2Error,
+      phone3Error
     };
   }
 };
 </script>
 
 <style>
-
+.form-check-input:checked {
+  background-color: #ffbc50;
+  border-color: #ffbc50;
+}
 </style>
