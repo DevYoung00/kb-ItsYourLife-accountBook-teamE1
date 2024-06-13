@@ -100,10 +100,7 @@ export const useTransactionsStore = defineStore({
     //거래 등록
     async addTransaction(transaction, router) {
       try {
-        if (!this.transactions.length) {
-          await this.fetchTransactions();
-        }
-
+        //Json-server의 마지막 id 값 불러옴
         const lastTransaction = this.transactions[this.transactions.length - 1];
         const lastPostId = lastTransaction ? lastTransaction.id : 0;
         const newPostId = Number(lastPostId) + 1;
@@ -111,6 +108,8 @@ export const useTransactionsStore = defineStore({
         const userStore = useUsersStore();
         const userId = userStore.getUserId;
         console.log(userId);
+
+        //세션에 값이 없을 시, 로그인 화면으로 이동
         if (!userId) {
           alert("로그인 후 사용 바랍니다.")
           router.push('/login');
@@ -123,10 +122,6 @@ export const useTransactionsStore = defineStore({
           console.log("거래가 저장되었습니다:", newTransaction);
           alert("거래가 저장되었습니다.");
         }
-
-
-
-
       } catch (error) {
         console.error("거래를 저장하는 중에 오류가 발생했습니다:", error);
         alert("거래를 저장하는 중에 오류가 발생했습니다.");
