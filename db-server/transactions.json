@@ -79,6 +79,14 @@
       "amount": 2000000,
       "memo": "월급",
       "userId": "user1"
+    },
+    {
+      "id": "11",
+      "category": "출금",
+      "date": "2024-06-13",
+      "amount": 1200,
+      "memo": "교통비",
+      "userId": "user1"
     }
   ]
 }
