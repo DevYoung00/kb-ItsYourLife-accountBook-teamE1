@@ -151,4 +151,7 @@ export default {
     --bs-table-bg: #ffcc00;
 }
 
+img {
+    cursor: pointer;
+}
 </style>
