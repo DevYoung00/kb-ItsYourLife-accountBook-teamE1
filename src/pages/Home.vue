@@ -30,7 +30,7 @@
             </table>
             </div>
             <div id="transaction-list-text-div">
-            <button type="button" class="btn btn-outline-secondary" id="show-transaction-create-btn" @click="showTransactionsForm = true">추가</button>
+            <button type="button" class="btn btn-outline-secondary" id="show-transaction-create-btn" @click="showTransactionsForm = true">빠른추가</button>
             <router-link to="/transactions/list">  <button type="button" class="btn btn-outline-secondary" id="current-transaction-btn">더보기</button></router-link>
             </div>
         </div>
@@ -38,7 +38,7 @@
         <div v-if="showTransactionsForm" class="modal"  @click.self="showTransactionsForm = false">
             <div class="modal-content">
                 <span class="modal-close" @click="showTransactionsForm = false" style="font-size: 50px;">&times;</span>
-                <TranscationsForm />
+                <TranscationsForm @transactionAdded="handleTransactionAdded" />
             </div>
         </div>
         
@@ -47,54 +47,60 @@
     </template>
     
     <script>
-    import {useTransactionsStore} from '../stores/TransactionsStore';
-    import {ref,onMounted,watch} from 'vue';
+    import { useTransactionsStore } from '../stores/TransactionsStore';
+    import { ref, onMounted, watch } from 'vue';
     import HomeCard from "../components/HomeCard.vue";
-    import TranscationsForm from "../components/TranscationsForm.vue"
-    import {useUsersStore} from "../stores/UsersStore"
+    import TranscationsForm from "../components/TranscationsForm.vue";
+    import { useUsersStore } from "../stores/UsersStore";
     import { useRouter } from 'vue-router';
-
+    
     export default {
-        components:{
+        components: {
             HomeCard,
             TranscationsForm
         },
-        setup(){
-        const transactionsList = ref([]);
-        const currentTransactionList = ref([]);
-        const transactionsByDateList = ref([]);
-        const transactionsStore = useTransactionsStore();
-        const usersStore = useUsersStore()
-        const showTransactionsForm = ref(false);
-        const userId = ref('');
-        const router = useRouter();
-
-        function updateTransactionLists(){
-            transactionsList.value = transactionsStore.transactions;
-            transactionsByDateList.value = transactionsStore.transactionsByDate;
-            currentTransactionList.value = transactionsByDateList.value.slice(0, 4);
-            console.log(transactionsByDateList.value)
-        }
-        watch(() => transactionsStore.currentChangeDate, updateTransactionLists);
-
-        onMounted(async () => {
-        userId.value =  usersStore.getUserId
-        console.log()
-        if(userId.value===""){
-            router.push("/login")
-        }
-        else {
-            await transactionsStore.getTransaction();
-            updateTransactionLists();
-        }
-
-        });
-
-        return {
-            currentTransactionList,
-            transactionsByDateList,
-            showTransactionsForm
-        };
+        setup() {
+            const transactionsList = ref([]);
+            const currentTransactionList = ref([]);
+            const transactionsByDateList = ref([]);
+            const transactionsStore = useTransactionsStore();
+            const usersStore = useUsersStore();
+            const showTransactionsForm = ref(false);
+            const userId = ref('');
+            const router = useRouter();
+    
+            function updateTransactionLists() {
+                transactionsList.value = transactionsStore.transactions;
+                transactionsByDateList.value = transactionsStore.transactionsByDate;
+                currentTransactionList.value = transactionsByDateList.value.slice(0, 4);
+                console.log(transactionsByDateList.value);
+            }
+    
+            async function handleTransactionAdded() {
+                console.log("자식 추가");
+                showTransactionsForm.value = false; // 모달 닫기
+                await transactionsStore.getTransaction(); // 트랜잭션 목록 다시 불러오기
+                updateTransactionLists(); // 트랜잭션 목록 갱신
+            }
+    
+            watch(() => transactionsStore.currentChangeDate, updateTransactionLists);
+    
+            onMounted(async () => {
+                userId.value = usersStore.getUserId;
+                if (userId.value === "") {
+                    router.push("/login");
+                } else {
+                    await transactionsStore.getTransaction();
+                    updateTransactionLists();
+                }
+            });
+    
+            return {
+                currentTransactionList,
+                transactionsByDateList,
+                showTransactionsForm,
+                handleTransactionAdded,
+            };
         }
     }
     </script>

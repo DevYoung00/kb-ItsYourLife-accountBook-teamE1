@@ -46,7 +46,9 @@ import { useRouter } from 'vue-router';
 import { useTransactionsStore } from '../stores/TransactionsStore';
 
 export default {
-  setup() {
+  // emit 코드 추가 
+  emits: ['transactionAdded'], 
+  setup(_, { emit }){
     const transactionsStore = useTransactionsStore();
     const router = useRouter();
 
@@ -62,6 +64,7 @@ export default {
       //TransactionsStore의 거래 추가 함수 호출
       await transactionsStore.addTransaction({ ...transaction }, router);
       resetForm();
+      emit('transactionAdded');
     };
 
     //취소 시 메인화면으로 이동

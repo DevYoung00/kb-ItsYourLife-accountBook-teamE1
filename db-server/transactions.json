@@ -63,6 +63,22 @@
       "amount": 3333,
       "memo": "정산",
       "userId": "user1"
+    },
+    {
+      "id": 9,
+      "category": "입금",
+      "date": "2024-06-13",
+      "amount": 1000,
+      "memo": "캐시백",
+      "userId": "user1"
+    },
+    {
+      "id": 10,
+      "category": "입금",
+      "date": "2024-05-03",
+      "amount": 500000,
+      "memo": "상여금",
+      "userId": "user1"
     }
   ]
 }
