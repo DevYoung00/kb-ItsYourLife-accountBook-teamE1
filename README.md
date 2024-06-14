@@ -1,7 +1,9 @@
 # 가계부 서비스
 
-Kb IT's your life 5기 전공 E반 1조 스켈레톤 프로젝트
-<img src="https://github.com/DevYoung00/kb-ItsYourLife-accountBook-teamE1/assets/93467085/c359e724-f693-435d-b410-50a7c1f52810" width="800"/> 
+📆 **24.06.10 ~ 24.06.14**
+<br/>
+**Kb IT's your life 5기 전공 E반 1조**
+<img src="https://github.com/DevYoung00/kb-ItsYourLife-accountBook-teamE1/assets/93467085/0bd77611-076c-45d6-8f56-d98e815a1792" width="800"/> 
 
 ## Index
 - [Member](#member)
