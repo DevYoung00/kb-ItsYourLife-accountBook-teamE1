@@ -76,6 +76,7 @@ npm run dev
 │   └── vite.svg
 ├── src
 │   ├── components
+│   │   ├── ChartCard.vue
 │   │   ├── Header.vue
 │   │   ├── HomeCard.vue
 │   │   ├── LoginForm.vue
@@ -83,6 +84,7 @@ npm run dev
 │   │   ├── TransactionOne.vue
 │   │   └── TranscationsForm.vue
 │   ├── pages
+│   │   ├── Chart.vue
 │   │   ├── Home.vue
 │   │   ├── Profile.vue
 │   │   ├── Setting.vue
